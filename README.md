@@ -1,5 +1,5 @@
 # GtsFront
-
+Este poyecto abarca unicamente la parte del Dash, para GTS.
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.2.
 
 ## Development server
