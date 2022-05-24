@@ -1,0 +1,37 @@
+<form [formGroup]="formAddItem">
+  <div class="row">
+    <div class="col-12">
+      <h6>ARTICULO A COTIZAR</h6>
+    </div>
+    <div class="col-5">
+      <mat-form-field class="w-100">
+        <mat-label>Descripcion</mat-label>
+        <input
+          matInput
+          formControlName="description"
+          placeholder="Ej. Platen Roller ZT410"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-4">
+      <mat-form-field class="w-100">
+        <mat-label>No Parte</mat-label>
+        <input
+          matInput
+          formControlName="part_no"
+          placeholder="Ej. 	P1058930-080"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-3">
+      <mat-form-field class="w-100">
+        <mat-label>Cantidad</mat-label>
+        <input matInput formControlName="quantity" type="number" />
+      </mat-form-field>
+    </div>
+    <div class="col-12 text-end my-3">
+      <button class="btn btn-danger m-1" mat-dialog-close>CANCELAR</button>
+      <button class="btn btn-dark m-1" (click)="emitItemQt()">GUARDAR</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,47 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-5 gts_gradient fullscreen">
+            <div class="row h-100 align-items-center justify-content-center">
+                <div class="col-10">
+                    <h1 class="text-white fw-bold">
+                        Bienvenido!
+                    </h1>
+                    <p class="text-white mt-3 fs-5">
+                        Es un placer tenerlo de vuelta.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-7 glass_water fullscreen">
+            <div class="row h-100 align-items-center justify-content-center">
+                <div class="col-10 text-center">
+
+                    <div class="mb-5">
+                        <h1 class="fw-bold">Iniciar Sesion</h1>
+                        <p class="text-muted">
+                            Ingrese sus datos para acceder a su cuenta.
+                        </p>
+                    </div>
+
+                    <div>
+                        <mat-form-field class="w-100">
+                            <mat-label>Usuario</mat-label>
+                            <input type="email" matInput placeholder="Ex. jesus.cadena@gtsmexico.net">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field class="w-100">
+                            <mat-label>Contraseña</mat-label>
+                            <input type="password" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-5">
+                        <button class="btn btn-lg gts_gradient text-white rounded w-75" (click)="login()">
+                            Iniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

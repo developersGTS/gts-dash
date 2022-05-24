@@ -1,0 +1,196 @@
+<div
+  class="card p-2 shadow mb-4 border-secondary border-4 border-top-0 border-end-0 border-start-0"
+>
+  <div class="row m-0 p-1 pt-2">
+    <div class="col-10">
+      <h5 class="fw-bold fs-4">
+        <span class="badge bg-secondary">
+          {{ quotation.quotation_no ? quotation.quotation_no : quotation._id }}
+        </span>
+      </h5>
+    </div>
+    <div class="col-2 text-end">
+      <!-- ICON BUTTON MENU -->
+      <mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+      <!-- MENU LIST OPTIONS -->
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item disabled>Editar</button>
+        <button mat-menu-item disabled>Enviar por correo</button>
+        <button
+          mat-menu-item
+          (click)="
+            updateStatus(
+              'Enviada a cobro',
+              '¿Desea enviar la CO ' + quotation.quotation_no + ' a cobro?'
+            )
+          "
+        >
+          Enviar a cobro
+        </button>
+        <button
+          mat-menu-item
+          (click)="
+            updateStatus(
+              'En revision interna',
+              '¿Desea enviar la CO ' +
+                quotation.quotation_no +
+                ' a revision interna?'
+            )
+          "
+        >
+          Enviar a revision
+        </button>
+        <button
+          mat-menu-item
+          (click)="
+            updateStatus(
+              'Autorizada por cliente',
+              '¿Desea marcar la CO ' +
+                quotation.quotation_no +
+                ' como autorizada por el cliente?'
+            )
+          "
+        >
+          Autorizar cotizacion
+        </button>
+        <button
+          mat-menu-item
+          (click)="
+            openUpdateStatusDialog(
+              quotation.quotation_no || '',
+              quotation._id || '',
+              quotation.status_tracker || [],
+              quotation.company.nickname,
+              quotation.contact.name,
+              quotation.description
+            )
+          "
+        >
+          Cambiar Estatus
+        </button>
+        <button mat-menu-item (click)="markAsFinished()">Finalizar</button>
+        <button mat-menu-item disabled>Descargar PDF</button>
+        <button mat-menu-item disabled>Visualizar PDF</button>
+        <button mat-menu-item disabled>Eliminar</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="row m-0 p-2">
+    <div class="col-12 col-lg-8">
+      <p class="fw-bold">
+        {{ quotation.date_request | date }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-4 text-center">
+      <div
+        appQtStatusV1
+        class="w-100"
+        [status]="quotation.status"
+        (click)="
+          openUpdateStatusDialog(
+            quotation.quotation_no || '',
+            quotation._id || '',
+            quotation.status_tracker || [],
+            quotation.company.nickname,
+            quotation.contact.name,
+            quotation.description
+          )
+        "
+      >
+        {{ quotation.status }}
+      </div>
+    </div>
+  </div>
+  <div class="row p-2 m-0">
+    <div class="col-6 col-3 py-3 py-lg-0">
+      <h6
+        class="fs-6 text-uppercase c-pointer"
+        (click)="openCompanyPreview(quotation.company)"
+      >
+        {{ quotation.company.nickname }}
+      </h6>
+    </div>
+    <div class="col-6 col-3 py-3 py-lg-0">
+      <h6
+        class="fs-6 text-uppercase c-pointer"
+        (click)="openContactPreview(quotation.contact)"
+      >
+        {{ quotation.contact.name }}
+      </h6>
+    </div>
+    <div class="col-12 col-lg-6 py-2 py-lg-0" *ngIf="quotation.service">
+      <p class="c-pointer" (click)="openServicePreview(quotation.service)">
+        <span class="text-muted">Servicio:</span>
+        <span class="px-2" *ngIf="quotation.service">
+          {{
+            quotation.service.service_order
+              ? quotation.service.service_order
+              : quotation.service._id
+          }}
+        </span>
+        <span class="px-2" *ngIf="!quotation.service">No asignado</span>
+      </p>
+    </div>
+    <div class="col-12 p-4">
+      <p>
+        {{ quotation.description }}
+      </p>
+    </div>
+  </div>
+  <div class="row m-0 p-2">
+    <div class="col-12 col-lg-4 text-lg-center py-3 py-lg-0">
+      <span class="text-muted">Asignado:</span>
+      <span class="px-2 fw-bold">
+        {{ quotation.assign_to ? quotation.assign_to.realname : "No asignado" }}
+      </span>
+    </div>
+    <div class="col-6 col-lg-3 text-lg-center">
+      <span class="px-1 fw-bold">
+        {{ quotation.quotation_items ? quotation.quotation_items.length : 0 }}
+      </span>
+      Articulos
+    </div>
+    <div class="col-6 col-lg-2 text-center">
+      <p
+        [class]="
+          quotation.enabled ? 'text-success fw-bold' : 'text-danger fw-bold'
+        "
+      >
+        {{ quotation.enabled ? "Vigente" : "No Vigente" }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-3 text-lg-center">
+      <span class="text-muted px-2">Prioridad:</span
+      ><span [class]="getPriorityClass(quotation.priority)">{{
+        getPriority(quotation.priority)
+      }}</span>
+    </div>
+  </div>
+  <div class="row m-0 px-2 py-3">
+    <div class="col-12 col-lg-3 my-1 my-lg-0">
+      <button class="btn btn-dark w-100">DESCARGAR PDF</button>
+    </div>
+    <div class="col-12 col-lg-3 my-1 my-lg-0">
+      <button class="btn btn-dark w-100">VISTA PREVIA PDF</button>
+    </div>
+    <div class="col-12 col-lg-3 my-1 my-lg-0">
+      <button class="btn btn-dark w-100" (click)="openFastView()">
+        VISTA RAPIDA
+      </button>
+    </div>
+    <div class="col-12 col-lg-3 my-1 my-lg-0">
+      <button
+        class="btn btn-dark w-100"
+        (click)="
+          openQuotationDesglose(
+            quotation.quotation_no
+              ? quotation.quotation_no
+              : quotation._id || ''
+          )
+        "
+      >
+        ABRIR DESGLOSE
+      </button>
+    </div>
+  </div>
+</div>

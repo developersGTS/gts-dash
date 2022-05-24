@@ -1,0 +1,167 @@
+<div
+  class="card p-2 pb-3 shadow mb-4 border-secondary border-4 border-top-0 border-end-0 border-start-0"
+>
+  <div class="row justify-content-end py-2">
+    <div class="col-11 px-4">
+      <span
+        *ngIf="
+          !item.purcharse_options?.length || item.purcharse_options?.length == 0
+        "
+        class="badge bg-warning text-dark me-2"
+        >Pendiente de cotizar</span
+      >
+
+      <span
+        *ngIf="
+          item.purcharse_options?.length &&
+          item.purcharse_options?.length != 0 &&
+          item.purcharse_options?.length != 1 &&
+          item.purcharse_options?.length != 2
+        "
+        class="badge bg-success text-white me-2"
+        >Listo</span
+      >
+
+      <span *ngIf="item.authorized" class="badge bg-success text-white me-2"
+        >Autorizado</span
+      >
+
+      <span
+        *ngIf="item.authorized == false"
+        class="badge bg-danger text-white me-2"
+        >No Autorizado</span
+      >
+
+      <span *ngIf="item.bought" class="badge bg-success text-white me-2"
+        >Comprado</span
+      >
+
+      <span
+        *ngIf="item.authorized && !item.bought"
+        class="badge bg-warning text-dark me-2"
+        >Pendiente de comprar</span
+      >
+    </div>
+    <div class="col-1 text-end">
+      <mat-icon class="" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="openAddPurcharseOption()">
+          Agregar opcion de compra
+        </button>
+
+        <button mat-menu-item (click)="markAsAuthorized()">
+          {{
+            item.authorized
+              ? "Marcar como no autorizado"
+              : "Marcar como autorizado"
+          }}
+        </button>
+        <button mat-menu-item (click)="markAsBought()">
+          {{ item.bought ? "Marcar como no comprado" : "Marcar como comprado" }}
+        </button>
+        <button mat-menu-item>Comprar mejor opcion</button>
+        <button mat-menu-item disabled>Agregar recordatorio</button>
+        <button mat-menu-item disabled>Agregar Nota</button>
+        <button mat-menu-item (click)="editItem()">Editar</button>
+        <button mat-menu-item (click)="emitDeleteItemFn()">Eliminar</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="row m-0">
+    <div class="col-6">
+      <h6>Descripcion:</h6>
+      <p>{{ item.description }}</p>
+    </div>
+    <div class="col-4 text-center">
+      <h6>No Parte:</h6>
+      <p>{{ item.part_no }}</p>
+    </div>
+    <div class="col-2 text-center">
+      <h6>Cant:</h6>
+      <p>{{ item.quantity }}</p>
+    </div>
+    <div class="col-3 text-center">
+      <h6>P. Unit:</h6>
+      <p class="text-secondary fw-bold">{{ best_option_price | currency }}</p>
+    </div>
+    <div class="col-3 text-center">
+      <h6>SubTotal:</h6>
+      <p>{{ subtotal | currency }}</p>
+    </div>
+    <div class="col-3 text-center">
+      <h6>IVA:</h6>
+      <p>{{ iva | currency }}</p>
+    </div>
+    <div class="col-3 text-center">
+      <h6 class="fw-bold">Total:</h6>
+      <p class="fw-bold">{{ total | currency }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <button
+        class="btn btn-light w-100 position-relative"
+        (click)="openNotes()"
+      >
+        Ver Notas
+        <span
+          *ngIf="item.notes?.length"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark"
+        >
+          {{ item.notes?.length ? item.notes?.length : 0 }}
+          <span class="visually-hidden">purcharse options</span>
+        </span>
+      </button>
+    </div>
+    <div class="col-4">
+      <button
+        class="btn btn-light w-100 position-relative"
+        (click)="openPurcharseOptions()"
+      >
+        Ver opciones de compra
+        <span
+          *ngIf="item.purcharse_options?.length"
+          [class]="
+            item.purcharse_options?.length == 0 ||
+            item.purcharse_options?.length == 1 ||
+            item.purcharse_options?.length == 2
+              ? 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark'
+              : 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success'
+          "
+        >
+          {{
+            item.purcharse_options?.length ? item.purcharse_options?.length : 0
+          }}
+          <span class="visually-hidden">purcharse options</span>
+        </span>
+      </button>
+    </div>
+    <div class="col-4" *ngIf="item.authorized">
+      <ng-content *ngIf="item.bought; then comprado; else comprar"></ng-content>
+
+      <ng-template #comprar>
+        <a
+          class="btn btn-primary w-100"
+          [href]="best_option_link"
+          target="_blank"
+          *ngIf="best_option_link != ''"
+        >
+          Comprar Mejor Opcion
+        </a>
+
+        <div
+          class="w-100 text-center py-1"
+          *ngIf="best_option_tel != '' && best_option_link == ''"
+        >
+          <p class="text-muted fs-6">
+            Ordenar al: <b class="text-primary px-2">{{ best_option_tel }}</b>
+          </p>
+        </div>
+      </ng-template>
+
+      <ng-template #comprado>
+        <button class="btn btn-secondary w-100">Comprar otra vez</button>
+      </ng-template>
+    </div>
+  </div>
+</div>

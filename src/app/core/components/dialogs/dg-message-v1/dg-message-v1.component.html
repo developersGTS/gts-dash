@@ -1,0 +1,17 @@
+<div class="row">
+  <div
+    class="col-12 text-center"
+    style="height: 125px !important"
+    *ngIf="dataDialog.status || dataDialog.status == 0"
+  >
+    <img [src]="getStatusIcon(dataDialog.status)" class="h-100" />
+  </div>
+  <div class="col-12 text-center py-4">
+    <h6 class="text-muted fs-5">
+      {{ dataDialog.message }}
+    </h6>
+  </div>
+  <div class="col-12 text-center mb-2">
+    <button class="btn btn-secondary" mat-dialog-close>OK!</button>
+  </div>
+</div>

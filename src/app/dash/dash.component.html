@@ -1,0 +1,22 @@
+<div class="container-fluid m-0 p-0" >
+    <mat-drawer-container class="h-100 " autosize>
+        <perfect-scrollbar style="height: 100vh;" class="glass_water">
+
+            <!-- NAVBAR -->
+            <div style="height: 60px;">
+                <app-navbar-classic (toggle_out)="drawer.toggle()" style="position: fixed; z-index: 100;" class="w-100"></app-navbar-classic>
+            </div>
+            
+            <!-- CONTAINER -->
+            <div class="container-fluid m-0 p-0" style="position: relative;">
+                <router-outlet class="overflow-auto"></router-outlet>
+            </div>
+
+        </perfect-scrollbar>
+        <mat-drawer #drawer class="col-9 col-sm-6 col-md-4 col-lg-3 glass_water" mode="push">
+            <perfect-scrollbar style="height: 100vh;">
+                <app-sidebar-classic (toggle_out)="drawer.toggle()"></app-sidebar-classic>
+            </perfect-scrollbar>
+        </mat-drawer>        
+    </mat-drawer-container>
+</div>

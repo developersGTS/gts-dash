@@ -1,0 +1,79 @@
+<div class="row m-0 p-0">
+  <div class="col-12 text-end">
+    <mat-icon class="c-pointer" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="openCompanyAdd(company)">Editar</button>
+    </mat-menu>
+  </div>
+  <div class="col-12 pb-3">
+    <h6 class="fw-bold fs-5">
+      {{ company.nickname }}
+    </h6>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h6 class="text-muted">DATOS FISCALES:</h6>
+    </div>
+    <div class="col-12 col-lg-9">
+      <p>
+        {{
+          company.datos_fiscales?.razon_social
+            ? company.datos_fiscales?.razon_social
+            : "Razon Social No Registrada"
+        }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-3">
+      <p>
+        {{
+          company.datos_fiscales?.rfc
+            ? company.datos_fiscales?.rfc
+            : "RFC No Registrado"
+        }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-9">
+      <p>
+        {{ mail_default }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-3">
+      <p>
+        {{ tel_default }}
+      </p>
+    </div>
+  </div>
+  <div class="row my-3" *ngIf="company.address && company.address.length > 0">
+    <div class="col-12">
+      <h6 class="text-muted">UBICACION:</h6>
+    </div>
+    <div class="col-12 col-lg-3">
+      <p>
+        {{ country }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-9">
+      <p>
+        {{ city }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-9">
+      <p>
+        {{ street }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-3">
+      <p>
+        {{ "C.P: " + zip_code }}
+      </p>
+    </div>
+  </div>
+  <div class="row justify-content-end">
+    <div class="col-12 col-lg-4 my-1 my-lg-0">
+      <button class="btn btn-dark w-100">COMO LLEGAR</button>
+    </div>
+    <div class="col-12 col-lg-4 my-1 my-lg-0">
+      <button class="btn btn-dark w-100">VER COMPLETO</button>
+    </div>
+  </div>
+</div>

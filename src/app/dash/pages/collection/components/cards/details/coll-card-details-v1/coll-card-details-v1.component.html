@@ -1,0 +1,283 @@
+<div
+  class="card p-2 shadow mb-4 border-secondary border-4 border-top-0 border-end-0 border-start-0"
+>
+  <div class="row m-0 p-1 pt-2">
+    <div class="col-10">
+      <h5 class="fw-bold">
+        <span class="badge bg-secondary">
+          CO
+          {{ quotation.quotation_no ? quotation.quotation_no : quotation._id }}
+        </span>
+        <span class="badge bg-primary mx-2" *ngIf="quotation.service">
+          {{
+            quotation.service.service_order
+              ? "ORDS " + quotation.service.service_order
+              : "ID SERVICIO " + quotation.service._id
+          }}
+        </span>
+        <span class="badge bg-success mx-2" *ngIf="quotation.billed">
+          Pagada
+        </span>
+      </h5>
+    </div>
+    <div class="col-2 text-end">
+      <!-- ICON BUTTON MENU -->
+      <mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+      <!-- MENU LIST OPTIONS -->
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item disabled>Editar</button>
+        <button mat-menu-item disabled>Enviar por correo</button>
+        <button mat-menu-item click="markAsInvoiced()">
+          Marcar como facturada
+        </button>
+        <button mat-menu-item (click)="markAsBilled()">
+          Marcar como pagada
+        </button>
+        <button mat-menu-item disabled>Ingresar PO</button>
+        <button mat-menu-item disabled>Ingresar contrarecibo</button>
+        <button mat-menu-item disabled>Ingresar abono</button>
+        <button
+          mat-menu-item
+          (click)="
+            openUpdateStatusDialog(
+              quotation.quotation_no || '',
+              quotation._id || '',
+              quotation.status_tracker || [],
+              quotation.company.nickname,
+              quotation.contact.name,
+              quotation.description
+            )
+          "
+        >
+          Cambiar Estatus
+        </button>
+        <button mat-menu-item (click)="markAsFinished()">Finalizar</button>
+        <button mat-menu-item disabled>Descargar PDF</button>
+        <button mat-menu-item disabled>Visualizar PDF</button>
+        <button mat-menu-item disabled>Eliminar</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="row m-0 p-2">
+    <div class="col-12 col-lg-8">
+      <p class="fw-bold">
+        {{ quotation.date_request | date }}
+      </p>
+    </div>
+    <div class="col-12 col-lg-4 text-center">
+      <div
+        appQtStatusV1
+        class="w-100"
+        [status]="quotation.status"
+        [quotation_data]="{
+          company: quotation.company.nickname,
+          contact: quotation.contact.name,
+          description: quotation.description,
+          quotation_id: quotation._id,
+          status_tracker: quotation.status_tracker || [],
+          folio: quotation.quotation_no || '',
+          mode_collection: true
+        }"
+        (emitQuotation)="quotation ? (quotation = $event) : null"
+      >
+        {{ quotation.status }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Collection Data -->
+
+  <div class="row m-0 p-2 align-items-center">
+    <div class="col-12 col-lg-9">
+      <div class="row m-0">
+        <div class="col-3">
+          <h6
+            class="fs-6 text-uppercase c-pointer"
+            (click)="openCompanyPreview(quotation.company)"
+          >
+            {{ quotation.company.nickname }}
+          </h6>
+        </div>
+        <div class="col-12 col-lg-3 my-2 my-lg-0">
+          <h6
+            class="fs-6 text-uppercase c-pointer"
+            (click)="openContactPreview(quotation.contact)"
+          >
+            {{ quotation.contact.name }}
+          </h6>
+        </div>
+        <div class="col-12 col-lg-6" *ngIf="quotation.service">
+          <p class="c-pointer" (click)="openServicePreview(quotation.service)">
+            <span class="text-muted">Servicio:</span>
+            <span class="px-2" *ngIf="quotation.service">
+              {{
+                quotation.service.service_order
+                  ? quotation.service.service_order
+                  : quotation.service._id
+              }}
+            </span>
+            <span class="px-2" *ngIf="!quotation.service">No asignado</span>
+          </p>
+        </div>
+
+        <!-- DESCRIPTION -->
+
+        <div class="col-12 p-4">
+          <p>
+            {{ quotation.description }}
+          </p>
+        </div>
+      </div>
+      <div class="row m-0">
+        <div class="col-12 col-lg-6 p-2">
+          <span class="text-muted me-2">Pago programado:</span>
+          <span class="fw-bold">
+            {{
+              quotation.collection_data &&
+              quotation.collection_data.programmed_payment
+                ? (quotation.collection_data.programmed_payment | date)
+                : "Pendiente"
+            }}
+          </span>
+        </div>
+        <div class="col-12 col-lg-6 p-2">
+          <span class="text-muted me-2">Pagado el:</span>
+          <span class="fw-bold">
+            {{
+              quotation.collection_data &&
+              quotation.collection_data.payment_date
+                ? (quotation.collection_data.payment_date | date)
+                : "Pendiente"
+            }}
+          </span>
+        </div>
+        <div class="col-12 col-lg-6 p-2">
+          <span class="text-muted me-2"> PO: </span>
+          <span>{{
+            quotation.collection_data &&
+            quotation.collection_data.purchase_order
+              ? quotation.collection_data.purchase_order
+              : "Pendiente"
+          }}</span>
+        </div>
+        <div class="col-12 col-lg-6 p-2">
+          <span class="me-2 text-muted">Factura:</span>
+          <span>{{
+            quotation.collection_data && quotation.collection_data.invoice_no
+              ? quotation.collection_data.invoice_no
+              : "Pendiente"
+          }}</span>
+        </div>
+
+        <div
+          class="col-12 col-lg-6 p-2"
+          *ngIf="
+            quotation.collection_data &&
+            quotation.collection_data.payment_method
+          "
+        >
+          <span class="me-2 text-muted">Metodo de pago:</span>
+          <span>{{
+            quotation.collection_data &&
+            quotation.collection_data.payment_method
+              ? quotation.collection_data.payment_method
+              : ""
+          }}</span>
+        </div>
+
+        <div
+          class="col-12 col-lg-6 p-2"
+          *ngIf="quotation.collection_data && quotation.collection_data.receipt"
+        >
+          <span class="me-2 text-muted">Contrarecibo:</span>
+          <span>{{
+            quotation.collection_data && quotation.collection_data.receipt
+              ? quotation.collection_data.receipt
+              : ""
+          }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-3 h-100 my-5 my-lg-0">
+      <div class="row h-100 align-items-center">
+        <div class="col-6 text-end">
+          <span class="bg-secondary text-white px-2 fw-bold">SUBTOTAL:</span>
+        </div>
+        <div class="col-6">
+          <span class="fw-bold">{{
+            (quotation.collection_data && quotation.collection_data.subtotal
+              ? quotation.collection_data.subtotal
+              : 0
+            ) | currency
+          }}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6 text-end">
+          <span class="bg-secondary text-white px-2 fw-bold">IVA:</span>
+        </div>
+        <div class="col-6">
+          <span class="fw-bold">{{
+            (quotation.collection_data && quotation.collection_data.iva
+              ? quotation.collection_data.iva
+              : 0
+            ) | currency
+          }}</span>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-6 text-end">
+          <span class="bg-primary text-white px-2 fw-bold">TOTAL:</span>
+        </div>
+        <div class="col-6">
+          <span class="fw-bold">{{
+            (quotation.collection_data && quotation.collection_data.total
+              ? quotation.collection_data.total
+              : 0
+            ) | currency
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="row m-0 px-2 py-3">
+    <div class="col-12 col-lg-3 my-1 my-lg-0">
+      <button
+        class="btn btn-secondary w-100 text-uppercase"
+        (click)="markAsInvoiced()"
+      >
+        Procesar Factura
+      </button>
+    </div>
+    <div class="col-12 col-lg-3 my-1 my-lg-0">
+      <button
+        class="btn btn-success w-100 text-uppercase"
+        (click)="markAsBilled()"
+      >
+        Marcar como Pagada
+      </button>
+    </div>
+    <div class="col-12 col-lg-3 my-1 my-lg-0">
+      <button class="btn btn-dark w-100" (click)="openFastView()">
+        VISTA RAPIDA
+      </button>
+    </div>
+    <div class="col-12 col-lg-3 my-1 my-lg-0">
+      <button
+        class="btn btn-dark w-100"
+        (click)="
+          openQuotationDesglose(
+            quotation.quotation_no
+              ? quotation.quotation_no
+              : quotation._id || ''
+          )
+        "
+      >
+        ABRIR DESGLOSE
+      </button>
+    </div>
+  </div>
+</div>

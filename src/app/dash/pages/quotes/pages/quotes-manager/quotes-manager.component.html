@@ -1,0 +1,40 @@
+<mat-stepper [orientation]="(stepperOrientation | async)!" class="mt-2">
+  <!-- GENERAL INFO -->
+  <mat-step label="Informacion General">
+    <app-qt-general-info
+      (emitQuotation)="updateGeneralInfo($event)"
+      (emitProfit)="setProfitClient($event)"
+      (emitPreviewData)="setPreviewData($event)"
+      (emitReadyToSave)="setReadyToSave($event)"
+    >
+    </app-qt-general-info>
+  </mat-step>
+
+  <!-- ITEMS -->
+  <mat-step label="Articulos a cotizar">
+    <app-qt-items
+      (emitItems)="updateItemsQt($event)"
+      (emitTotal)="setTotalItmes($event)"
+      [profit_client]="profit_client"
+    ></app-qt-items>
+  </mat-step>
+
+  <!-- NOTES -->
+  <mat-step label="Notas">
+    <app-qt-notes
+      [notes]="quotation.notes ? quotation.notes : []"
+      (emitNotes)="updateNotesQt($event)"
+    ></app-qt-notes>
+  </mat-step>
+
+  <!-- PREVIEW -->
+  <mat-step>
+    <ng-template matStepLabel>Vista Previa</ng-template>
+    <app-qt-preview
+      [quotation]="quotation"
+      [readyToSave]="readyToSave"
+      [preview_data]="preview_data"
+      (emitNotes)="updateNotesQt($event)"
+    ></app-qt-preview>
+  </mat-step>
+</mat-stepper>

@@ -1,0 +1,99 @@
+<div class="row">
+  <div class="col-12 mt-5 mb-1">
+    <h5>ARTICULOS A COTIZAR</h5>
+  </div>
+
+  <!-- ITEMS PANEL -->
+  <div class="col-12 col-lg-8">
+    <div class="card snow_again" style="height: 50vh">
+      <perfect-scrollbar class="h-100">
+        <div class="row m-0">
+          <div class="col-12 p-1" *ngFor="let item of items; let i = index">
+            <app-qt-card-item-details-v1
+              [item]="item"
+              (emitItem)="recibeItem(i, $event)"
+              (emitDeleteItem)="deleteItem(i, $event)"
+              [profit_client]="profit_client"
+            ></app-qt-card-item-details-v1>
+          </div>
+        </div>
+      </perfect-scrollbar>
+    </div>
+    <div class="col-12 text-end mt-3">
+      <div class="row">
+        <div class="col-12 col-lg-6"></div>
+        <div class="col-12 col-lg-3">
+          <button class="btn btn-danger m-1 w-100" (click)="deleteAllItems()">
+            <span class="">
+              <mat-icon class="text-white h-100">delete</mat-icon>
+            </span>
+            <span class=""> ELIMINAR TODOS </span>
+          </button>
+        </div>
+        <div class="col-12 col-lg-3">
+          <button
+            type="button"
+            class="btn btn-secondary m-1 w-100"
+            (click)="openAddItem()"
+          >
+            <span>
+              <mat-icon>add</mat-icon>
+            </span>
+            <span class=""> AGREGAR ARTICULO </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="col-12 col-lg-4 pt-5">
+    <!-- ITEMS -->
+    <div>
+      <h6 class="text-muted">Articulos en total:</h6>
+      <p class="fw-bold px-5">{{ items.length }}</p>
+    </div>
+
+    <!-- DOLLAR -->
+    <div class="my-5">
+      <h6 class="text-muted">Precio Base del Dolar:</h6>
+      <mat-form-field class="">
+        <mat-label>Precio del Dolar</mat-label>
+        <input matInput type="number" value="20.5" />
+      </mat-form-field>
+      <div class="col-12 col-lg-6">
+        <button class="btn btn-secondary ms-lg-4 w-100">Actualizar Base</button>
+      </div>
+    </div>
+
+    <!-- TOTALS -->
+    <div class="mt-5 py-5">
+      <div class="row">
+        <div class="col-5 text-end">
+          <h6 class="text-muted">SubTotal:</h6>
+          <h6 class="text-muted">IVA:</h6>
+          <h5 class="fw-bold">Total:</h5>
+        </div>
+        <div class="col-5 text-end">
+          <h6 class="text-muted">{{ subtotal | currency }} MXN</h6>
+          <h6 class="text-muted">{{ iva | currency }} MXN</h6>
+          <h5 class="fw-bold">{{ total | currency }} MXN</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row m-0 my-3">
+  <div class="col-12 col-lg-4">
+    <button matStepperPrevious class="btn btn-outline-dark w-100">
+      REGRESAR
+    </button>
+  </div>
+  <div class="col-12 col-lg-4 my-2 my-lg-0"></div>
+  <div class="col-12 col-lg-4 text-end">
+    <button matStepperNext class="btn gts_gradient text-white w-100">
+      SIGUIENTE
+    </button>
+  </div>
+</div>

@@ -1,0 +1,372 @@
+<!-- PREVIEW -->
+<div class="row m-0 p-4 mt-3">
+  <div class="col-10 mb-5">
+    <a routerLink="../../" class="btn btn-dark px-4 me-3">Ir a Cotizaciones</a>
+    <a routerLink="/dash/collection" class="btn btn-dark px-4 me-3"
+      >Ir a Cobranza</a
+    >
+  </div>
+
+  <div class="col-2 mb-5 text-end">
+    <mat-icon class="c-pointer" [matMenuTriggerFor]="menu">
+      more_vert
+    </mat-icon>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="openAddItem()">
+        Agregar articulo a cotizar
+      </button>
+    </mat-menu>
+  </div>
+
+  <!-- TITTLE -->
+  <div class="col-12">
+    <h5>VISTA PREVIA DE COTIZACION</h5>
+    <h3>
+      <span class="badge bg-secondary p-1">{{ quotation.quotation_no }}</span>
+    </h3>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="loading">
+    <div class="row p-4">
+      <div class="col-12 text-center p-5">
+        <mat-spinner diameter="150" class="m-auto"></mat-spinner>
+      </div>
+      <div class="col-12 text-center p-5">
+        <p class="text-muted">Cargando informacion de la cotizacion</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADED -->
+  <div *ngIf="!loading">
+    <ng-content *ngIf="quoteLoaded; then showData; else pending"></ng-content>
+
+    <ng-template #pending>
+      <div class="row m-0 p-5 mt-1">
+        <h6>
+          No se ha encontrado informacion disponible para la cotizacion
+          <b>'{{ param }}'</b>
+        </h6>
+      </div>
+    </ng-template>
+
+    <ng-template #showData>
+      <div class="row p-2 mt-1">
+        <!-- ASSIGNED -->
+        <div class="col-12 text-end">
+          <p>
+            <b>Asignado:</b>
+            <span class="px-2">{{
+              quotation.assign_to && quotation.assign_to.username
+                ? quotation.assign_to.username
+                : ""
+            }}</span>
+          </p>
+        </div>
+
+        <!-- DATE -->
+        <div class="col-2">
+          <p>{{ quotation.date_request | date }}</p>
+        </div>
+
+        <!-- STATUS -->
+        <div class="col-6">
+          <p
+            appQtStatusV1
+            [status]="quotation.status"
+            (emitQuotation)="setQuotation($event)"
+            [quotation_data]="getDataStatusQuotation()"
+          >
+            {{ quotation.status }}
+          </p>
+        </div>
+
+        <!-- ENABLED -->
+        <div class="col-2 text-center">
+          <p
+            [class]="
+              quotation.enabled ? 'text-success fw-bold' : 'text-danger fw-bold'
+            "
+          >
+            {{ quotation.enabled ? "Activa" : "Inactiva" }}
+          </p>
+        </div>
+
+        <!-- PRIORITY -->
+        <div class="col-2 text-center">
+          <p class="">
+            <span class="text-muted"> Prioridad: </span>
+            <span [class]="getPriorityClass(quotation.priority)">{{
+              getPriority(quotation.priority)
+            }}</span>
+          </p>
+        </div>
+
+        <!-- CLIENT -->
+        <div class="col-4">
+          <p class="text-uppercase">
+            {{
+              (quotation.company ? quotation.company.nickname : "") | uppercase
+            }}
+          </p>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="col-4">
+          <p class="text-capitalize">
+            {{ (quotation.contact ? quotation.contact.name : "") | uppercase }}
+          </p>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="col-12">
+          <p class="">{{ quotation.description }}</p>
+        </div>
+
+        <!-- SERVICE -->
+        <div class="col-12 my-5">
+          <div class="row">
+            <div class="col-12">
+              <h6 class="text-muted fw-bold">SERVICIO:</h6>
+              <p class="text-muted" *ngIf="quotation.service">
+                {{
+                  quotation.service && quotation.service.service_order
+                    ? "FOLIO: " + quotation.service.service_order
+                    : "ID: " + quotation.service._id
+                }}
+              </p>
+              <p class="text-danger" *ngIf="!quotation.service">No asignado</p>
+            </div>
+            <div class="row m-0" *ngIf="quotation.service">
+              <div class="col-12">
+                <p class="">
+                  <b>Equipo:</b>
+                  <span class="px-2">{{
+                    quotation.service.equipment?.equipment
+                  }}</span>
+                </p>
+              </div>
+              <div class="col-4">
+                <p class="">
+                  <b>Marca:</b>
+                  <span class="px-2">{{
+                    quotation.service.equipment?.brand
+                      ? quotation.service.equipment?.brand
+                      : ""
+                  }}</span>
+                </p>
+              </div>
+              <div class="col-4">
+                <p class="">
+                  <b>Model:</b>
+                  <span class="px-2">{{
+                    quotation.service.equipment?.model
+                      ? quotation.service.equipment?.model
+                      : ""
+                  }}</span>
+                </p>
+              </div>
+              <div class="col-4">
+                <p class="">
+                  <b>Serie:</b>
+                  <span class="px-2">{{
+                    quotation.service.equipment?.serial_no
+                      ? quotation.service.equipment?.serial_no
+                      : ""
+                  }}</span>
+                </p>
+              </div>
+              <div class="col-12" *ngIf="quotation.service.general_description">
+                <p class="">
+                  <b>Descripcion:</b>
+                  <span class="px-2">{{
+                    quotation.service.general_description
+                  }}</span>
+                </p>
+              </div>
+              <div class="col-12" *ngIf="quotation.service.diagnostic">
+                <p class="">
+                  <b>Diagnostico:</b>
+                  <span class="px-2">{{ quotation.service.diagnostic }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INVOICE -->
+        <div class="col-4">
+          <p class="text-capitalize">
+            {{
+              quotation.invoice_required
+                ? "Requiere Factura"
+                : "No requiere factura - Publico En General"
+            }}
+          </p>
+        </div>
+
+        <!-- DATE END -->
+        <div class="col-4">
+          <p class="">
+            Finalizado en:
+            <span class="px-2" *ngIf="quotation.date_end">
+              {{ quotation.date_end | date }}
+            </span>
+            <span class="px-2 text-muted" *ngIf="!quotation.date_end">
+              pendiente
+            </span>
+          </p>
+        </div>
+
+        <!-- ITEMS & TOTAL -->
+        <div class="col-12 my-5">
+          <div class="col-12">
+            <h6 class="fw-bold">ARTICULOS A COTIZAR:</h6>
+          </div>
+          <div class="row p-4">
+            <div class="col-4">
+              <p class="">
+                <span class="fw-bold px-2">
+                  {{
+                    quotation.quotation_items
+                      ? quotation.quotation_items.length
+                      : 0
+                  }}
+                </span>
+                Articulos en total
+              </p>
+              <p class="">
+                <span class="fw-bold px-2 text-success">
+                  {{ countItemsAuthorized() }}
+                </span>
+                Articulos Autorizados
+              </p>
+            </div>
+            <div class="col-3">
+              <p class="">Dolar $21.0</p>
+            </div>
+            <div class="col-5">
+              <div class="row">
+                <div class="col-6 text-end">
+                  <p>SubTotal:</p>
+                  <p>IVA:</p>
+                  <p class="fw-bold">TOTAL:</p>
+                </div>
+                <div class="col-6 text-end">
+                  <p>
+                    {{
+                      (quotation.subtotal ? quotation.subtotal : 0) | currency
+                    }}
+                  </p>
+                  <p>{{ (quotation.iva ? quotation.iva : 0) | currency }}</p>
+                  <p class="fw-bold">
+                    {{ (quotation.total ? quotation.total : 0) | currency }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============  ITEMS =========== -->
+
+        <div class="col-12 my-5">
+          <h6 class="p-3">Articulos Autorizados</h6>
+          <div
+            class="my-2"
+            *ngFor="let item of quotation.quotation_items; let i = index"
+          >
+            <app-qt-card-item-details-v1
+              [mode_edit]="getEditModeData(i)"
+              [item]="item"
+              [profit_client]="quotation.company.profit_percent"
+              (emitItem)="setItemQuotation(i, $event)"
+              (emitDeleteItem)="deleteItem(i, $event)"
+              *ngIf="item.authorized"
+            ></app-qt-card-item-details-v1>
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="col-12 my-5">
+          <div
+            class="my-2"
+            *ngFor="let item of quotation.quotation_items; let i = index"
+          >
+            <app-qt-card-item-details-v1
+              [mode_edit]="getEditModeData(i)"
+              [item]="item"
+              [profit_client]="quotation.company.profit_percent"
+              (emitItem)="setItemQuotation(i, $event)"
+              (emitDeleteItem)="deleteItem(i, $event)"
+              *ngIf="!item.authorized"
+            ></app-qt-card-item-details-v1>
+          </div>
+        </div>
+
+        <!-- NOTES -->
+        <div class="col-12">
+          <h6 class="fw-bold">NOTAS</h6>
+
+          <div
+            class="row"
+            *ngIf="quotation.notes && quotation.notes.length == 0"
+          >
+            <p class="text-muted text-center">Sin notas registradas</p>
+          </div>
+
+          <div class="row p-1" *ngIf="quotation.notes">
+            <div
+              class="col-12 p-2"
+              *ngFor="let note of quotation.notes; let i = index"
+            >
+              <app-qt-card-note-resumen-v1
+                (emitNote)="setNote(i, $event)"
+                (emitDeleteNote)="deleteNote(i, $event)"
+                [note]="note"
+              ></app-qt-card-note-resumen-v1>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATUS TRACKER -->
+        <div class="col-12 my-5">
+          <div class="col-12">
+            <h6 class="fw-bold">HISTORIAL DE SEGUIMIENTO:</h6>
+          </div>
+          <div class="row p-4">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+              <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="date_created">
+                <th mat-header-cell *matHeaderCellDef>FECHA DE CAMBIO</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.date_created | date }}
+                </td>
+              </ng-container>
+
+              <!-- Weight Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>CAMBIO DE ESTATUS A</th>
+                <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+              </ng-container>
+
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="user">
+                <th mat-header-cell *matHeaderCellDef>REALIZADO POR</th>
+                <td mat-cell *matCellDef="let element">{{ element.user }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

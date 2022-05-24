@@ -1,0 +1,33 @@
+<div class="col-12">
+  <form class="example-form">
+    <mat-form-field class="w-100">
+      <mat-label>Buscador</mat-label>
+      <input
+        type="text"
+        placeholder="Puede escribir un folio, cliente, equipo, concepto, etc."
+        matInput
+        [formControl]="searchControl"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+      <button
+        type="button"
+        *ngIf="searchControl.dirty"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        class="btn"
+        (click)="cleanFilter()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+</div>

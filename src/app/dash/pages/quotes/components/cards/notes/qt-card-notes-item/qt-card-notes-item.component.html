@@ -1,0 +1,50 @@
+<div class="row justify-content-end pb-3">
+  <div class="col-2 text-end">
+    <mat-icon [mat-dialog-close]="notes">close</mat-icon>
+  </div>
+</div>
+<div class="row">
+  <perfect-scrollbar style="height: 75vh; width: 75vh">
+    <div class="row">
+      <div class="col-12 mb-2" *ngFor="let note of notes; let i = index">
+        <div class="card p-3">
+          <div class="row align-items-center">
+            <!-- NOTE CONTECT -->
+            <div class="col-12">
+              <h6>{{ note.title }}</h6>
+              <p>{{ note.description }}</p>
+            </div>
+            <!-- BUTTONS OPTIONS -->
+            <div class="row m-0 justify-content-end mt-2">
+              <div class="col-4">
+                <button class="btn btn-danger w-100" (click)="deleteNote(i)">
+                  Eliminar
+                </button>
+              </div>
+              <div class="col-4">
+                <button
+                  class="btn btn-secondary w-100"
+                  (click)="openAddNote(i, note)"
+                >
+                  Editar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </perfect-scrollbar>
+</div>
+<div class="row m-0 justify-content-end mt-2">
+  <div class="col-4">
+    <button class="btn btn-danger w-100" (click)="deleteAllNotes()">
+      Eliminar Todas
+    </button>
+  </div>
+  <div class="col-4">
+    <button class="btn btn-dark w-100" (click)="openAddNote()">
+      Agregar Nota
+    </button>
+  </div>
+</div>

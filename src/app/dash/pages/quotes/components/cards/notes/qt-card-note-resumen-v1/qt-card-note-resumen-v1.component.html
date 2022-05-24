@@ -1,0 +1,25 @@
+<div class="row m-0 py-1">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{ note.title }} </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>{{ note.description }}</p>
+      <div>
+        <div class="row justify-content-end">
+          <div class="col-2">
+            <button class="btn btn-danger w-100" (click)="deleteNote()">
+              ELIMINAR
+            </button>
+          </div>
+          <div class="col-2">
+            <button class="btn btn-dark w-100" (click)="openAddNote()">
+              ACTUALIZAR
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

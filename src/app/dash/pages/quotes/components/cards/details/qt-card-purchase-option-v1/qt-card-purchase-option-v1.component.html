@@ -1,0 +1,134 @@
+<div class="card shadow p-3">
+  <!-- COUNTRY, SUPPLIER AND MENU -->
+  <div class="row p-2">
+    <div class="col-4">
+      <h6 class="text-muted fw-bold">{{ option.country }}</h6>
+    </div>
+    <div class="col-6">
+      <h6 class="text-primary fw-bold">{{ option.supplier }}</h6>
+    </div>
+    <div class="col-2 text-end">
+      <mat-icon class="" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="markAsBestOption()">
+          Marcar como mejor opcion
+        </button>
+        <button mat-menu-item (click)="openEditPurcharseOption(option)">
+          Editar
+        </button>
+        <button mat-menu-item>Eliminar</button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <!-- DESCRIPTION AND BUTTON -->
+  <div class="row p-2 my-3">
+    <div class="col-8">
+      <p>{{ option.description }}</p>
+    </div>
+    <div class="col-4 my-auto p-2">
+      <ng-content *ngIf="option.link; then link; else tel"></ng-content>
+
+      <ng-template #link>
+        <a [href]="option.link" class="btn btn-primary w-100" target="_blank"
+          >Link de compra</a
+        >
+      </ng-template>
+
+      <ng-template #tel>
+        <p>{{ option.tel }}</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- TOTAL -->
+  <div class="row p-2 m-0 my-3">
+    <div class="col-2 text-center">
+      <p class="text-muted">Costo:</p>
+      <p class="fw-bold text-muted">
+        {{ option.acquisition_price | currency }}
+      </p>
+    </div>
+    <div class="col-2 text-center">
+      <p class="text-muted">Envio:</p>
+      <p class="fw-bold text-muted">{{ option.delivery_cost | currency }}</p>
+    </div>
+    <div class="col-2 text-center">
+      <p class="text-muted">Ganacia:</p>
+      <p class="fw-bold text-muted">{{ option.profit | currency }}</p>
+    </div>
+    <div class="col-2 text-center">
+      <p class="fw-bold">SubTotal:</p>
+      <p class="fw-bold">{{ option.subtotal | currency }}</p>
+    </div>
+    <div class="col-2 text-center">
+      <p class="text-muted text-muted">IVA:</p>
+      <p class="fw-bold text-muted">{{ option.iva | currency }}</p>
+    </div>
+    <div class="col-2 text-center">
+      <p class="fw-bold text-muted">Total:</p>
+      <p class="fw-bold text-muted">{{ option.total | currency }}</p>
+    </div>
+  </div>
+
+  <!-- CONDITION, QTY, DELIVERY -->
+  <div class="row p-2">
+    <div class="col-4">
+      <p>
+        <span class="text-muted me-2">Condicion:</span> {{ option.condition }}
+      </p>
+    </div>
+    <div class="col-4">
+      <p>
+        <span class="text-muted me-2">Disponibles:</span>
+        {{ option.cant_available }}
+      </p>
+    </div>
+    <div class="col-4">
+      <p>
+        <span class="text-muted me-2">Entrega:</span>
+        <span>{{ option.delivery_time }}</span>
+        <span class="text-muted ms-2">dia(s) habil(es)</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- INVOICE, IMPORT AND DELIVERY COST -->
+  <div class="row p-2">
+    <div class="col-4">
+      <p>
+        <span class="text-muted me-2">Factura:</span>
+        {{ option.invoice ? "Si" : "No" }}
+      </p>
+    </div>
+    <div class="col-4">
+      <p>
+        <span class="text-muted me-2">Importado:</span>
+        {{ option.import ? "Si" : "No" }}
+      </p>
+    </div>
+    <div class="col-4">
+      <p>
+        <span class="text-muted me-2">$ Importacion:</span>
+        <span>{{
+          option.import_data && option.import_data.import
+            ? (option.import_data.import | currency)
+            : (0 | currency)
+        }}</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- CHIPS - BEST OPTION -->
+  <div class="row p-2">
+    <div class="col-12">
+      <mat-chip-list aria-label="Fish selection">
+        <mat-chip color="secondary" selected *ngIf="option.best_option"
+          >Mejor Opcion</mat-chip
+        >
+        <mat-chip *ngIf="false">Mas rapido</mat-chip>
+        <mat-chip *ngIf="false">Mas barato</mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+</div>

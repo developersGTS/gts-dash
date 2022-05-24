@@ -1,0 +1,25 @@
+<div class="row mb-3 justify-content-end">
+  <div class="col-1 text-end">
+    <mat-icon [mat-dialog-close]="purcharseOptions"> close </mat-icon>
+  </div>
+</div>
+<perfect-scrollbar style="height: 75vh">
+  <div class="row m-0">
+    <div
+      class="col-12 my-2"
+      *ngFor="let option of purcharseOptions; let i = index"
+    >
+      <app-qt-card-purchase-option-v1
+        [option]="option"
+        (emitOption)="recibeOption(i, $event)"
+      ></app-qt-card-purchase-option-v1>
+    </div>
+  </div>
+</perfect-scrollbar>
+<div class="row mt-3 justify-content-end">
+  <div class="col-3 p-2">
+    <button class="btn btn-dark w-100" (click)="openAddNewPurcharseOption()">
+      Agregar Opcion Nueva
+    </button>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-12 text-center py-3">
+    <h6 class="text-muted fs-4">
+      {{ dialog.title }}
+    </h6>
+    <p *ngIf="dialog.message">
+      {{ dialog.message }}
+    </p>
+  </div>
+  <div class="my-1 text-center">
+    <button
+      [class]="
+        'mx-2 btn btn-' +
+        (btn.color ? btn.color : 'secondary') +
+        ' ' +
+        (btn.class ? btn.class : '')
+      "
+      [mat-dialog-close]="btn.value"
+      *ngFor="let btn of dialog.buttons"
+    >
+      {{ btn.title | uppercase }}
+    </button>
+  </div>
+</div>

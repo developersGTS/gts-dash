@@ -1,0 +1,269 @@
+<div class="row m-0 mb-5">
+  <form [formGroup]="formGeneralInfo">
+    <div class="row">
+      <!-- COMPANY -->
+      <div class="col-12 col-lg-4">
+        <div class="row">
+          <div class="col-10">
+            <mat-form-field class="w-100 mb-0 pb-0" appearance="outline">
+              <mat-label>Cliente</mat-label>
+              <mat-select formControlName="company" required>
+                <mat-option
+                  *ngFor="let company of companys"
+                  [value]="company._id"
+                  (click)="companyEvent(company)"
+                >
+                  {{ company.nickname }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div
+              class="position-relative w-100"
+              style="height: 5px"
+              *ngIf="companys_loader"
+            >
+              <div
+                class="position-absolute translate-middle-y top-0 start-0 w-100 h-100"
+                style="z-index: 900; top: -15px !important"
+              >
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 my-auto">
+            <mat-icon color="primary" (click)="openAddCompany()"
+              >add_circle</mat-icon
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="col-12 col-lg-4">
+        <div class="row">
+          <div class="col-10">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Contacto</mat-label>
+              <mat-select formControlName="contact" required>
+                <mat-option
+                  *ngFor="let contact of contacts"
+                  [value]="contact._id"
+                  (click)="contactEvent(contact)"
+                >
+                  {{ contact.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div
+              class="position-relative w-100"
+              style="height: 5px"
+              *ngIf="contacts_loader"
+            >
+              <div
+                class="position-absolute translate-middle-y top-0 start-0 w-100 h-100"
+                style="z-index: 900; top: -15px !important"
+              >
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 my-auto">
+            <mat-icon color="primary" (click)="openAddContact()"
+              >add_circle</mat-icon
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS -->
+      <div class="col-12 col-lg-2">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Estatus</mat-label>
+          <mat-select formControlName="status" required>
+            <mat-option *ngFor="let st of status" [value]="st">
+              {{ st }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- PRIORITY -->
+      <div class="col-12 col-lg-2">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Prioridad</mat-label>
+          <mat-select formControlName="priority" required>
+            <mat-option *ngFor="let pr of priority" [value]="pr.value">
+              {{ pr.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <!-- DESCRIPTION -->
+      <div class="col-12 col-lg-6">
+        <mat-form-field class="w-100 h-100" appearance="outline">
+          <mat-label>Descripcion</mat-label>
+          <textarea
+            matInput
+            formControlName="description"
+            rows="6"
+            placeholder="Ej. Consumibles para Zebra ZT410..."
+          ></textarea>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="row">
+          <!-- DATE REQUEST -->
+          <div class="col-6">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Fecha de Solicitud</mat-label>
+              <input
+                matInput
+                type="date"
+                formControlName="date_request"
+                required
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- DATE END -->
+          <div class="col-6">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Fecha de Finalizacion</mat-label>
+              <input matInput type="date" formControlName="date_end" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <!-- SERVICE -->
+          <div class="col-12 col-lg-6">
+            <div class="row">
+              <div class="col-10">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Servicio Asignado</mat-label>
+                  <mat-select formControlName="service">
+                    <mat-option
+                      *ngFor="let service of services"
+                      [value]="service._id"
+                      (click)="serviceEvent(service)"
+                    >
+                      {{
+                        service.company.nickname +
+                          " - " +
+                          service.general_description
+                      }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div
+                  class="position-relative w-100"
+                  style="height: 5px"
+                  *ngIf="services_loader"
+                >
+                  <div
+                    class="position-absolute translate-middle-y top-0 start-0 w-100 h-100"
+                    style="z-index: 900; top: -15px !important"
+                  >
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2 my-auto">
+                <mat-icon class="bg-primary btn-rounded text-white">
+                  search
+                </mat-icon>
+              </div>
+            </div>
+          </div>
+          <!-- EMPLOYEE -->
+          <div class="col-12 col-lg-6">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Empleado Asignado</mat-label>
+              <mat-select formControlName="assign_to">
+                <mat-option
+                  *ngFor="let employee of employees"
+                  [value]="employee._id"
+                  (click)="userEvent(employee)"
+                >
+                  {{ employee.username }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div
+              class="position-relative w-100"
+              style="height: 5px"
+              *ngIf="employees_loader"
+            >
+              <div
+                class="position-absolute translate-middle-y top-0 start-0 w-100 h-100"
+                style="z-index: 900; top: -15px !important"
+              >
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- CO ACTIVE -->
+      <div class="col-6 col-lg-2 text-center">
+        <p class="title-toggle">Cotizacion Activa</p>
+        <mat-slide-toggle
+          color="primary"
+          formControlName="enabled"
+        ></mat-slide-toggle>
+      </div>
+
+      <!-- CO In Collection -->
+      <div class="col-6 col-lg-2 text-center">
+        <p class="title-toggle">Enviada a Cobro</p>
+        <mat-slide-toggle
+          color="primary"
+          formControlName="in_collection"
+        ></mat-slide-toggle>
+      </div>
+
+      <!-- CO Supervisor Approved -->
+      <div class="col-6 col-lg-2 text-center">
+        <p class="title-toggle">Revision Aprobada</p>
+        <mat-slide-toggle
+          color="primary"
+          formControlName="supervisor_approved"
+        ></mat-slide-toggle>
+      </div>
+
+      <!-- CO Customer Approved -->
+      <div class="col-6 col-lg-2 text-center">
+        <p class="title-toggle">Autorizada por Cliente</p>
+        <mat-slide-toggle
+          color="primary"
+          formControlName="customer_approved"
+        ></mat-slide-toggle>
+      </div>
+
+      <!-- CO Invoice Required -->
+      <div class="col-6 col-lg-2 text-center">
+        <p class="title-toggle">Requiere Factura</p>
+        <mat-slide-toggle
+          color="primary"
+          formControlName="invoice_required"
+        ></mat-slide-toggle>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="row m-0 my-3">
+  <div class="col-12 col-lg-3">
+    <button class="btn btn-secondary w-100">LIMPIAR CAMPOS</button>
+  </div>
+  <div class="col-12 col-lg-6 my-2 my-lg-0"></div>
+  <div class="col-12 col-lg-3 text-end">
+    <button matStepperNext class="btn gts_gradient text-white w-100">
+      SIGUIENTE
+    </button>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<form [formGroup]="filterForm">
+  <div class="row m-0">
+    <div class="col-12">
+      <div class="card shadow">
+        <div class="card-body">
+          <!-- CARD TITTLE -->
+          <div class="row">
+            <div class="col-10">
+              <h6 class="card-title p-2">Filtro de Busqueda</h6>
+            </div>
+            <div class="col-2 text-end pe-3" *ngIf="active">
+              <mat-icon (click)="clearFilter()">cancel</mat-icon>
+            </div>
+          </div>
+          <div class="row align-items-center">
+            <!-- SLIDE TOGGLES -->
+            <div class="col-12 col-lg-6">
+              <div class="row">
+                <div class="col-6 col-sm-3 text-center">
+                  <p class="title-toggle">Aprobadas Cliente</p>
+                  <mat-slide-toggle
+                    color="primary"
+                    formControlName="authorizedByClient"
+                  ></mat-slide-toggle>
+                </div>
+                <div class="col-6 col-sm-3 text-center">
+                  <p class="title-toggle">Revision Finalizada</p>
+                  <mat-slide-toggle
+                    color="primary"
+                    formControlName="reviewFinished"
+                  ></mat-slide-toggle>
+                </div>
+                <div class="col-6 col-sm-3 text-center">
+                  <p class="title-toggle">Enviada a Cobro</p>
+                  <mat-slide-toggle
+                    color="primary"
+                    formControlName="sendToPayment"
+                  ></mat-slide-toggle>
+                </div>
+                <div class="col-6 col-sm-3 text-center">
+                  <p class="title-toggle">Material para Entrega</p>
+                  <mat-slide-toggle
+                    color="primary"
+                    formControlName="materialToDelivery"
+                  ></mat-slide-toggle>
+                </div>
+              </div>
+            </div>
+
+            <!-- SELECT INPUTS -->
+            <div class="col-12 col-lg-6">
+              <div class="row">
+                <div class="col-6 col-sm-3">
+                  <mat-form-field class="w-100">
+                    <mat-label>Estatus</mat-label>
+                    <mat-select name="status" formControlName="status">
+                      <mat-option *ngFor="let item of status" [value]="item">
+                        {{ item }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <mat-form-field class="w-100">
+                    <mat-label>Prioridad</mat-label>
+                    <mat-select name="priority" formControlName="priority">
+                      <mat-option
+                        *ngFor="let item of priority"
+                        [value]="item.value"
+                      >
+                        {{ item.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Cliente</mat-label>
+                    <mat-select name="companys" formControlName="company">
+                      <mat-option
+                        *ngFor="let company of companys"
+                        [value]="company._id"
+                      >
+                        {{ company.nickname }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

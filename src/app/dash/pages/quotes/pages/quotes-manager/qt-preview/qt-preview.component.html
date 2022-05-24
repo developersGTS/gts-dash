@@ -1,0 +1,277 @@
+<!-- PREVIEW -->
+
+<div class="row p-2 mt-3">
+  <!-- TITTLE -->
+  <div class="col-12">
+    <h5>VISTA PREVIA DE COTIZACION</h5>
+    <p class="text-muted fs-5 p-1">CO-2200</p>
+  </div>
+</div>
+
+<ng-content *ngIf="readyToSave; then showData; else pending"></ng-content>
+
+<ng-template #pending>
+  <div class="row p-2 mt-1">
+    <h6>
+      Por favor complete la informacion obligatoria para poder guardar la
+      cotizacion
+    </h6>
+    <div class="p-4">
+      <p class="fw-bold">Informacion pendiente:</p>
+      <div class="p-2">
+        <p *ngIf="!quotation.company || !quotation.contact" class="text-muted">
+          Seleccionar una compañia, contacto, estatus, prioridad, fecha de
+          solicitud y una descripcion.
+          <span class="fw-bold">En Informacion General.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #showData>
+  <div class="row p-2 mt-1">
+    <!-- ASSIGNED -->
+    <div class="col-12 text-end">
+      <p>
+        <b>Asignado:</b>
+        <span class="px-2">{{
+          preview_data.user && preview_data.user.username
+            ? preview_data.user.username
+            : ""
+        }}</span>
+      </p>
+    </div>
+
+    <!-- DATE -->
+    <div class="col-12 col-lg-2">
+      <p>{{ quotation.date_request | date }}</p>
+    </div>
+
+    <!-- STATUS -->
+    <div class="col-12 col-lg-6">
+      <p class="fw-bold">{{ quotation.status }}</p>
+    </div>
+
+    <!-- ENABLED -->
+    <div class="col-6 col-lg-2 text-center">
+      <p
+        [class]="
+          quotation.enabled ? 'text-success fw-bold' : 'text-danger fw-bold'
+        "
+      >
+        {{ quotation.enabled ? "Activa" : "Inactiva" }}
+      </p>
+    </div>
+
+    <!-- PRIORITY -->
+    <div class="col-6 col-lg-2 text-center">
+      <p class="">
+        <span class="text-muted"> Prioridad: </span>
+        <span>{{ getPriority(quotation.priority) }}</span>
+      </p>
+    </div>
+
+    <!-- CLIENT -->
+    <div class="col-12 col-lg-4">
+      <p class="text-uppercase">
+        {{ preview_data.company ? preview_data.company.nickname : "" }}
+      </p>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="col-12 col-lg-4">
+      <p class="text-capitalize">
+        {{ preview_data.contact ? preview_data.contact.name : "" }}
+      </p>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="col-12">
+      <p class="">{{ quotation.description }}</p>
+    </div>
+
+    <!-- SERVICE -->
+    <div class="col-12 my-5">
+      <div class="row">
+        <div class="col-12">
+          <h6 class="text-muted fw-bold">SERVICIO:</h6>
+          <p class="text-muted" *ngIf="preview_data.service">
+            {{
+              preview_data.service && preview_data.service.service_order
+                ? "FOLIO: " + preview_data.service.service_order
+                : "ID: " + preview_data.service._id
+            }}
+          </p>
+          <p class="text-danger" *ngIf="!preview_data.service">No asignado</p>
+        </div>
+        <div class="row m-0" *ngIf="preview_data.service">
+          <div class="col-12">
+            <p class="">
+              <b>Equipo:</b>
+              <span class="px-2">{{
+                preview_data.service.equipment?.equipment
+              }}</span>
+            </p>
+          </div>
+          <div class="col-12 col-lg-4">
+            <p class="">
+              <b>Marca:</b>
+              <span class="px-2">{{
+                preview_data.service.equipment?.brand
+                  ? preview_data.service.equipment?.brand
+                  : ""
+              }}</span>
+            </p>
+          </div>
+          <div class="col-12 col-lg-4">
+            <p class="">
+              <b>Model:</b>
+              <span class="px-2">{{
+                preview_data.service.equipment?.model
+                  ? preview_data.service.equipment?.model
+                  : ""
+              }}</span>
+            </p>
+          </div>
+          <div class="col-12 col-lg-4">
+            <p class="">
+              <b>Serie:</b>
+              <span class="px-2">{{
+                preview_data.service.equipment?.serial_no
+                  ? preview_data.service.equipment?.serial_no
+                  : ""
+              }}</span>
+            </p>
+          </div>
+          <div class="col-12" *ngIf="preview_data.service.general_description">
+            <p class="">
+              <b>Descripcion:</b>
+              <span class="px-2">{{
+                preview_data.service.general_description
+              }}</span>
+            </p>
+          </div>
+          <div class="col-12" *ngIf="preview_data.service.diagnostic">
+            <p class="">
+              <b>Diagnostico:</b>
+              <span class="px-2">{{ preview_data.service.diagnostic }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVOICE -->
+    <div class="col-12 col-lg-4">
+      <p class="text-capitalize">
+        {{
+          quotation.invoice_required
+            ? "Requiere Factura"
+            : "No requiere factura - Publico En General"
+        }}
+      </p>
+    </div>
+
+    <!-- DATE END -->
+    <div class="col-12 col-lg-4">
+      <p class="">
+        Finalizado en:
+        <span class="px-2" *ngIf="quotation.date_end">
+          {{ quotation.date_end | date }}
+        </span>
+        <span class="px-2 text-muted" *ngIf="!quotation.date_end">
+          pendiente
+        </span>
+      </p>
+    </div>
+
+    <!-- ITEMS & TOTAL -->
+    <div class="col-12 my-5">
+      <div class="col-12">
+        <h6 class="fw-bold">ARTICULOS A COTIZAR:</h6>
+      </div>
+      <div class="row p-4">
+        <div class="col-12 col-lg-4">
+          <p class="">
+            <span class="fw-bold px-2">
+              {{
+                quotation.quotation_items ? quotation.quotation_items.length : 0
+              }}
+            </span>
+            Articulos en total
+          </p>
+        </div>
+        <div class="col-12 col-lg-3">
+          <p class="">Dolar $21.0</p>
+        </div>
+        <div class="col-12 col-lg-5">
+          <div class="row py-4 py-lg-0">
+            <div class="col-6 text-end">
+              <p>SubTotal:</p>
+              <p>IVA:</p>
+              <p class="fw-bold">TOTAL:</p>
+            </div>
+            <div class="col-6 text-end">
+              <p>
+                {{ (quotation.subtotal ? quotation.subtotal : 0) | currency }}
+              </p>
+              <p>{{ (quotation.iva ? quotation.iva : 0) | currency }}</p>
+              <p class="fw-bold">
+                {{ (quotation.total ? quotation.total : 0) | currency }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="col-12">
+      <h6 class="fw-bold">NOTAS</h6>
+      <div class="row p-1" *ngIf="quotation.notes">
+        <div
+          class="col-12 p-2"
+          *ngFor="let note of quotation.notes; let i = index"
+        >
+          <app-qt-card-note-resumen-v1
+            (emitNote)="setNote(i, $event)"
+            (emitDeleteNote)="deleteNote(i, $event)"
+            [note]="note"
+          ></app-qt-card-note-resumen-v1>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- BUTTONS -->
+<div class="row mt-5">
+  <div class="col-12 col-lg-2 my-1 my-lg-0">
+    <button matStepperPrevious class="btn btn-outline-dark w-100">
+      REGRESAR
+    </button>
+  </div>
+  <div [class]="readyToSave ? 'col-12 col-lg-3' : 'col-12 col-lg-5'"></div>
+  <div class="col-12 col-lg-2 my-1 my-lg-0">
+    <button class="btn btn-danger w-100" routerLink="/dash/quotes">
+      CANCELAR
+    </button>
+  </div>
+  <div class="col-12 col-lg-3 my-1 my-lg-0">
+    <button class="btn btn-light w-100">LIMPIAR TODOS LOS CAMPOS</button>
+  </div>
+  <div class="col-12 col-lg-2 my-1 my-lg-0" *ngIf="readyToSave">
+    <button
+      class="btn btn-dark w-100"
+      [disabled]="!readyToSave"
+      (click)="saveQuotation()"
+    >
+      GUARDAR
+    </button>
+  </div>
+  <div *ngIf="!readyToSave" class="col-12 py-2 text-lg-end">
+    <span class="text-danger">
+      <small> Complete la infomacion faltante para poder guardar </small></span
+    >
+  </div>
+</div>

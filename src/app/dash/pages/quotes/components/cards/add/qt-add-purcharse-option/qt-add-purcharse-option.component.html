@@ -1,0 +1,367 @@
+<perfect-scrollbar style="height: 75vh; width: 90vw !important">
+  <div class="row" style="height: 75vh">
+    <div class="col-12 align-self-start">
+      <form class="h-100" [formGroup]="formPurcharseOption">
+        <!-- TITTLE -->
+        <div class="row mb-3">
+          <div class="col-12">
+            <h6 class="fw-bold">Articulo A Cotizar</h6>
+          </div>
+        </div>
+
+        <!-- GENERAL INFO -->
+        <div class="row align-items-center">
+          <!-- COUNTRY -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>Pais</mat-label>
+              <input
+                matInput
+                placeholder="Ex. Mexico"
+                formControlName="country"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- SUPPLIER -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>Proveedor</mat-label>
+              <input
+                matInput
+                placeholder="Ex. INGRAM"
+                formControlName="supplier"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- CONDITION -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>Condicion</mat-label>
+              <input
+                matInput
+                placeholder="Ex. Nuevo"
+                formControlName="condition"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- QTY -->
+          <div class="col-1 text-center">
+            <mat-form-field class="w-100">
+              <mat-label>Cant. Disponible</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="cant_available"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- DELIVERY -->
+          <div class="col-1 text-center">
+            <mat-form-field class="w-100">
+              <mat-label>T. Entrega</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="delivery_time"
+                min="1"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- INVOICE -->
+          <div class="col-2 text-center">
+            <mat-slide-toggle color="primary" formControlName="invoice"
+              >Factura</mat-slide-toggle
+            >
+          </div>
+
+          <!-- AVAILABLE -->
+          <div class="col-2 text-center">
+            <mat-slide-toggle color="primary" formControlName="available"
+              >Disponible</mat-slide-toggle
+            >
+          </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field class="w-100">
+              <mat-label>Descripcion</mat-label>
+              <input
+                matInput
+                placeholder="Ex. Platen Roller ZT410"
+                formControlName="description"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- URL / TEL -->
+        <div class="row">
+          <div class="col-6">
+            <mat-form-field class="w-100">
+              <mat-label>URL de compra</mat-label>
+              <input
+                matInput
+                type="url"
+                placeholder="Ex. www.ctonline.mx/buscar/productos?b=SA400S37"
+                formControlName="link"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field class="w-100">
+              <mat-label>Telefono para solicitar pedido</mat-label>
+              <input matInput type="tel" formControlName="tel" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- COSTS -->
+        <div class="row align-items-center mt-5">
+          <div class="col-12">
+            <h6 class="text-muted fw-bold fs-smaller">COSTOS</h6>
+          </div>
+
+          <!-- COST -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>Precio de Compra</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="acquisition_price"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- COST DELIVERY -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>Costo de Envio</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="delivery_cost"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- % PROFIT -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>% Ganancia</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="profit_percent"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- PROFIT -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>Ganancia</mat-label>
+              <input type="number" matInput formControlName="profit" min="0" />
+            </mat-form-field>
+          </div>
+
+          <!-- IVA PERCENT -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>% IVA</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="iva_percent"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- IMPORT -->
+          <div class="col-2 text-center">
+            <mat-slide-toggle color="primary" formControlName="import"
+              >Importacion</mat-slide-toggle
+            >
+          </div>
+        </div>
+
+        <!-- IMPORT -->
+        <div
+          class="row align-items-center my-5"
+          *ngIf="this.formPurcharseOption.controls['import'].value"
+        >
+          <div class="col-12">
+            <h6 class="text-muted fw-bold fs-smaller">IMPORTACION</h6>
+          </div>
+
+          <!-- % TAX -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>% TAX</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="imp_tax_percent"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- TAX -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>TAX</mat-label>
+              <input type="number" matInput formControlName="imp_tax" min="0" />
+            </mat-form-field>
+          </div>
+
+          <!-- % IMPORT -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>% Importacion</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="imp_import_percent"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- IMPORT -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>Importacion</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="imp_import"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- % IVA -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>% IVA</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="imp_iva_percent"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- IVA -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>IVA</mat-label>
+              <input type="number" matInput formControlName="imp_iva" min="0" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- TOTAL -->
+        <div class="row align-items-center mt-5 py-4">
+          <div class="col-12">
+            <h6 class="text-muted fw-bold fs-smaller">TOTAL</h6>
+          </div>
+
+          <!-- BEST OPTION -->
+          <div class="col-3 text-center">
+            <mat-slide-toggle color="primary" formControlName="best_option"
+              >Mejor Opcion De Compra</mat-slide-toggle
+            >
+          </div>
+
+          <!-- SUBTOTAL -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>SubTotal</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="subtotal"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+
+          <!-- IVA -->
+          <div class="col-2">
+            <mat-form-field class="w-100">
+              <mat-label>IVA</mat-label>
+              <input type="number" matInput formControlName="iva" min="0" />
+            </mat-form-field>
+          </div>
+
+          <!-- TOTAL -->
+          <div class="col-3">
+            <mat-form-field class="w-100">
+              <mat-label>TOTAL</mat-label>
+              <input type="number" matInput formControlName="total" min="0" />
+            </mat-form-field>
+          </div>
+
+          <!-- RECALCULATE BTN -->
+          <div class="col-2">
+            <button
+              type="button"
+              [class]="
+                autocalcular
+                  ? 'btn btn-success w-100'
+                  : 'btn btn-secondary w-100'
+              "
+              (click)="autoCalculate()"
+            >
+              AUTOCALCULAR
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-12 align-self-end">
+      <!-- BTNS -->
+      <div class="row h-100 justify-content-end mt-5 py-4">
+        <!-- CANCEL -->
+        <div class="col-2">
+          <button type="button" class="btn btn-danger w-100" mat-dialog-close>
+            CANCELAR
+          </button>
+        </div>
+
+        <!-- CLEAN -->
+        <div class="col-2">
+          <button type="button" class="btn btn-light w-100">
+            LIMPIAR CAMPOS
+          </button>
+        </div>
+
+        <!-- SAVE -->
+        <div class="col-2">
+          <button
+            type="button"
+            class="btn btn-dark w-100"
+            (click)="addPurcharseOption()"
+          >
+            GUARDAR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</perfect-scrollbar>
