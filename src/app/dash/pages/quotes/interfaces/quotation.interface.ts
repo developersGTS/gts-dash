@@ -12,6 +12,7 @@ import {
 import { User } from '../../users/interfaces/user.interface';
 import { CollectionData } from './collection_data.interface';
 import { QuotationItem } from './quotation_item.interfaces';
+import { StatusTrackerPopulated } from '../../../interfaces/status_tracker.interface';
 
 export interface Quotation {
   _id?: string;
@@ -50,7 +51,7 @@ export interface QuotationPopulated {
   date_request: Date;
   description: string;
   status: string;
-  status_tracker?: StatusTracker[];
+  status_tracker?: StatusTrackerPopulated[];
   service?: ServicePopulated;
   date_end?: Date;
   quotation_no?: string;

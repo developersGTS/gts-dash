@@ -12,6 +12,7 @@ import {
   DgNotificationV1,
   DgNotificationV1Component,
 } from '../components/dialogs/dg-notification-v1/dg-notification-v1.component';
+import { DgSubmitV1, DgSubmitV1Component } from '../components/dialogs/dg-submit-v1/dg-submit-v1.component';
 import { StatusMessage } from '../interfaces/dialogs.interface';
 
 @Injectable({
@@ -45,6 +46,13 @@ export class DialogsService {
       width: '40vw',
       panelClass: 'opacity-75',
     });
+  }
+
+  openSubmitV1(data: DgSubmitV1) {
+    const dialogRef = this.dialog.open(DgSubmitV1Component, {
+      data
+    });
+    return dialogRef;
   }
 
   getStatusIcon(status: StatusMessage): string {

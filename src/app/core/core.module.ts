@@ -7,6 +7,7 @@ import { DgMessageV1Component } from './components/dialogs/dg-message-v1/dg-mess
 import { DgNotificationV1Component } from './components/dialogs/dg-notification-v1/dg-notification-v1.component';
 import { DgSubmitV1Component } from './components/dialogs/dg-submit-v1/dg-submit-v1.component';
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -21,7 +22,8 @@ import { AngularMaterialModule } from './modules/angular-material/angular-materi
   ],
   imports: [
     CommonModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    ReactiveFormsModule
   ],
   exports: [
     Page404Component,

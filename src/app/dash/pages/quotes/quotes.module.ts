@@ -50,6 +50,7 @@ import { QtCardPurchaseOptionV1Component } from './components/cards/details/qt-c
 import { QtUpdateStatusV1Component } from './components/modals/qt-update-status-v1/qt-update-status-v1.component';
 import { QtFastviewComponent } from './components/modals/qt-fastview/qt-fastview.component';
 import { QuoteDesgloseComponent } from './pages/quote-desglose/quote-desglose.component';
+import { QtSearcherItemsV1Component } from './components/searchers/qt-searcher-items-v1/qt-searcher-items-v1.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { QuoteDesgloseComponent } from './pages/quote-desglose/quote-desglose.co
     QtFastviewComponent,
     QuoteDesgloseComponent,
     QtStatusV1Directive,
+    QtSearcherItemsV1Component,
   ],
   imports: [
     CommonModule,

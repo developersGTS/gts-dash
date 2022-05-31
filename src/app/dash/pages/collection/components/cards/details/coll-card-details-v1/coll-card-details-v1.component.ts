@@ -19,6 +19,7 @@ import { ServicePopulated } from 'src/app/dash/pages/services/interfaces/service
 import { ServicesService } from 'src/app/dash/pages/services/services/services.service';
 import { CollectionService } from '../../../../services/collection.service';
 import { CollInvoiceAddV1Component } from '../../../modals/coll-invoice-add-v1/coll-invoice-add-v1.component';
+import { StatusTrackerPopulated } from '../../../../../../interfaces/status_tracker.interface';
 
 @Component({
   selector: 'app-coll-card-details-v1',
@@ -66,6 +67,12 @@ export class CollCardDetailsV1Component implements OnInit {
     this.quotation;
   }
 
+  convertStatusTrackerArray() {
+    return this.quotesService.convertStatusTrackerArray(
+      this.quotation.status_tracker || []
+    );
+  }
+
   // ==================== MODALS / DIALOGS ====================
   openCompanyPreview(company: Company): void {
     this.companysService.openCompanyPreview(company);
@@ -83,7 +90,11 @@ export class CollCardDetailsV1Component implements OnInit {
     const afterUpdate = this.quotesService.setUpdateStatusWithDialogs(
       this.quotation._id ? this.quotation._id : '',
       status,
-      this.quotation.status_tracker ? this.quotation.status_tracker : [],
+      this.quotation.status_tracker
+        ? this.quotesService.convertStatusTrackerArray(
+            this.quotation.status_tracker
+          )
+        : [],
       message
     );
 
@@ -111,7 +122,7 @@ export class CollCardDetailsV1Component implements OnInit {
   openUpdateStatusDialog(
     quotation_no: string,
     id: string,
-    status_tracker: StatusTracker[],
+    status_tracker: StatusTrackerPopulated[],
     company: string,
     contact: string,
     description: string
@@ -121,7 +132,8 @@ export class CollCardDetailsV1Component implements OnInit {
       contact,
       description,
       quotation_id: id,
-      status_tracker,
+      status_tracker:
+        this.quotesService.convertStatusTrackerArray(status_tracker),
       folio: quotation_no,
       mode_collection: true,
     };
@@ -166,7 +178,9 @@ export class CollCardDetailsV1Component implements OnInit {
         .setUpdateStatusWithDialogs(
           this.quotation._id,
           'Pagada',
-          this.quotation.status_tracker || [],
+          this.quotesService.convertStatusTrackerArray(
+            this.quotation.status_tracker || []
+          ) || [],
           '¿Desea marcar la CO ' + this.quotation.quotation_no + ' como pagada?'
         )
         .subscribe((res) => {
@@ -180,7 +194,9 @@ export class CollCardDetailsV1Component implements OnInit {
       .setUpdateStatusWithDialogs(
         this.quotation._id,
         'Facturada',
-        this.quotation.status_tracker || [],
+        this.quotesService.convertStatusTrackerArray(
+          this.quotation.status_tracker || []
+        ),
         '¿Desea marcar la CO ' +
           this.quotation.quotation_no +
           ' como Facturada?'
@@ -192,12 +208,15 @@ export class CollCardDetailsV1Component implements OnInit {
 
   markAsInvoiced() {
     const dialogRef = this.dialog.open(CollInvoiceAddV1Component, {
-      width: '60vw',
       data: this.quotation,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       result && result._id ? (this.quotation = result) : null;
     });
+  }
+
+  openAddPO() {
+    this.quotesService.openAddPO(this.quotation);
   }
 }

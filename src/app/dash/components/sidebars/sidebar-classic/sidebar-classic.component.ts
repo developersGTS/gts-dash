@@ -30,6 +30,24 @@ export class SidebarClassicComponent implements OnInit {
       url: '/dash/collection',
       icon: 'paid',
     },
+    {
+      title: 'Servicios',
+      section: 'home',
+      url: '/dash/services',
+      icon: 'construction',
+    },
+    {
+      title: 'Laboratorio',
+      section: 'home',
+      url: '/dash/services',
+      icon: 'store',
+    },
+    {
+      title: 'Equipos',
+      section: 'home',
+      url: '/dash/equipments',
+      icon: 'desktop_windows',
+    },
   ];
   admin: any[] = [];
   cuenta: any[] = [

@@ -23,6 +23,12 @@ export class CollPendingComponent implements OnInit {
             status: 'Enviada a cobro',
             enabled: true,
           },
+          {
+            'collection_data.receipt': '',
+            in_collection: true,
+            billed: false,
+            enabled: true,
+          },
         ],
       })
       .pipe(

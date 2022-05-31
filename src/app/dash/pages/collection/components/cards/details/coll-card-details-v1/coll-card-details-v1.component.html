@@ -33,7 +33,7 @@
         <button mat-menu-item (click)="markAsBilled()">
           Marcar como pagada
         </button>
-        <button mat-menu-item disabled>Ingresar PO</button>
+        <button mat-menu-item (click)="openAddPO()">Registrar PO</button>
         <button mat-menu-item disabled>Ingresar contrarecibo</button>
         <button mat-menu-item disabled>Ingresar abono</button>
         <button
@@ -74,7 +74,7 @@
           contact: quotation.contact.name,
           description: quotation.description,
           quotation_id: quotation._id,
-          status_tracker: quotation.status_tracker || [],
+          status_tracker: convertStatusTrackerArray(),
           folio: quotation.quotation_no || '',
           mode_collection: true
         }"

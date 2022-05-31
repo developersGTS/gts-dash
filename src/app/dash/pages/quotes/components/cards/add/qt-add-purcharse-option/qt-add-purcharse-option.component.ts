@@ -77,12 +77,15 @@ export class QtAddPurcharseOptionComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    console.log('this.data', this.data);
+    console.log("typeof this.data == 'number'", typeof this.data == 'number');
+
     if (typeof this.data == 'number') {
       this.profit_client = this.data;
       console.log('profit updated', this.profit_client);
     }
 
-    console.log('add prucharse option component: profit', this.profit_client);
+    console.log('add purcharse option component: profit', this.profit_client);
 
     // SI EXISTE LA PROPIEDAD 'PROFIT PERCENT' EN LA DATA DEL DIALOGO LA ASIGNA
     // SI NO EXISTA LA DATA DEL DIALOGO INSERTA EL VALOR DEL @INPUT profit_client
@@ -94,7 +97,13 @@ export class QtAddPurcharseOptionComponent implements OnInit, OnDestroy {
           this.profit_client
         );
 
-    if (this.data && this.data.description) {
+    if (
+      this.data &&
+      (this.data.description ||
+        this.data.acquisition_price ||
+        this.data.supplier ||
+        this.data.total)
+    ) {
       // AUTOCALCULATE OFF
       this.autocalcular = false;
 

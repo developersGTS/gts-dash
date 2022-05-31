@@ -13,6 +13,7 @@ import { UpdateStatusQuotationV1 } from '../../components/modals/qt-update-statu
 import { QuotationPopulated } from '../../interfaces/quotation.interface';
 import { QuotationItem } from '../../interfaces/quotation_item.interfaces';
 import { QuotesService } from '../../services/quotes.service';
+import { StatusTrackerPopulated } from '../../../../interfaces/status_tracker.interface';
 
 @Component({
   selector: 'app-quote-desglose',
@@ -28,7 +29,7 @@ export class QuoteDesgloseComponent implements OnInit {
 
   displayedColumns: string[] = ['date_created', 'status', 'user'];
 
-  dataSource: StatusTracker[] = [];
+  dataSource: StatusTrackerPopulated[] = [];
 
   @ViewChild(MatTable) table?: MatTable<StatusTracker>;
 
@@ -77,6 +78,10 @@ export class QuoteDesgloseComponent implements OnInit {
             if (result && result.length > 0 && result[0]._id) {
               this.quotation = result[0];
               this.dataSource = this.quotation.status_tracker || [];
+              console.log(
+                'this.quotation.status_tracker',
+                this.quotation.status_tracker
+              );
               this.table ? this.table.renderRows() : null;
               this.quoteLoaded = true;
             } else {
@@ -231,7 +236,9 @@ export class QuoteDesgloseComponent implements OnInit {
       contact: this.quotation.contact.name,
       description: this.quotation.description,
       quotation_id: this.quotation._id,
-      status_tracker: this.quotation.status_tracker || [],
+      status_tracker: this.quotesService.convertStatusTrackerArray(
+        this.quotation.status_tracker || []
+      ),
       folio: this.quotation.quotation_no || '',
     };
   }

@@ -25,6 +25,20 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'equipments',
+        loadChildren: () =>
+          import('./pages/equipments/equipments.module').then(
+            (m) => m.EquipmentsModule
+          ),
+      },
+      {
+        path: 'services',
+        loadChildren: () =>
+          import('./pages/services/services.module').then(
+            (m) => m.ServicesModule
+          ),
+      },
+      {
         path: 'home',
         redirectTo: '',
       },

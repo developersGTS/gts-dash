@@ -16,6 +16,7 @@ import {
   QuotationUpdate,
 } from '../interfaces/quotation.interface';
 import { PriorityList } from '../interfaces/quotations_service_data.interface';
+import { StatusTrackerPopulated } from '../../../interfaces/status_tracker.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -346,6 +347,23 @@ export class QuotesService {
     return obsQuotation;
   }
 
+  convertStatusTrackerArray(
+    status_tracker: StatusTrackerPopulated[]
+  ): StatusTracker[] {
+    let newStatus: StatusTracker[] = [];
+
+    for (let status of status_tracker) {
+      newStatus.push({
+        _id: status._id || '',
+        date_created: status.date_created || undefined,
+        status: status.status,
+        user: status.user._id || '',
+      });
+    }
+
+    return newStatus;
+  }
+
   // =========================== SEARCHER ===========================
 
   searchQuotationByKey(key: string) {
@@ -359,8 +377,6 @@ export class QuotesService {
     );
   }
 
-  
-
   // =========================== DIALOGS / MODALS ===========================
   openFastView(quotation: QuotationPopulated) {
     const dialogRef = this.dialog.open(QtFastviewComponent, {
@@ -373,5 +389,83 @@ export class QuotesService {
   // =========================== COLLECTION ===========================
   sendToCollection(quotation: QuotationPopulated): QuotationPopulated {
     return this.collectionService.processQuotationToCollection(quotation);
+  }
+
+  openAddPO(quotation: QuotationPopulated) {
+    const confirmationRef = this.dialogsService.openConfirmationV1({
+      title: '¿Desea agregar una PO a la CO ' + quotation.quotation_no + ' ?',
+      buttons: [
+        {
+          title: 'Cancelar',
+          value: false,
+          color: 'secondary',
+        },
+        {
+          title: 'Confirmar',
+          value: true,
+          color: 'success',
+        },
+      ],
+    });
+
+    confirmationRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const inputResult = this.dialogsService.openSubmitV1({
+          title: 'Folio de PO',
+          message: 'Ingrese el folio de la orden de compra',
+          buttons: [
+            {
+              title: 'Cancelar',
+              value: false,
+              color: 'secondary',
+            },
+            {
+              title: 'Guardar',
+              value: true,
+              color: 'success',
+            },
+          ],
+          input: {
+            label: 'No PO',
+          },
+        });
+
+        inputResult.afterClosed().subscribe((resultInput) => {
+          console.log('resultInput', resultInput);
+          if (resultInput) {
+            if (quotation.collection_data) {
+              quotation.collection_data.purchase_order = resultInput;
+            } else {
+              quotation.collection_data = {
+                expenses: 0,
+                profits: 0,
+                iva: 0,
+                subtotal: 0,
+                total: 0,
+                purchase_order: resultInput,
+              };
+            }
+
+            this.updateQuotation({
+              _id: quotation._id,
+              collection_data: quotation.collection_data,
+            }).subscribe((result) => {
+              console.log('result', result);
+              if (result) {
+                this.dialogsService.openNotificationV1({
+                  message: 'PO Agregada correctamente',
+                  status: StatusMessage.success,
+                });
+              } else {
+                this.dialogsService.openNotificationV1({
+                  message: 'Error al agregar PO',
+                  status: StatusMessage.danger,
+                });
+              }
+            });
+          }
+        });
+      }
+    });
   }
 }

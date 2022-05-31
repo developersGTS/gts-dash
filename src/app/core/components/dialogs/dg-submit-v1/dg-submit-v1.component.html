@@ -1,1 +1,38 @@
-<p>dg-submit-v1 works!</p>
+<div class="row">
+  <div class="col-12 text-center py-3">
+    <h6 class="text-muted fs-4">
+      {{ dialog.title }}
+    </h6>
+    <p *ngIf="dialog.message">
+      {{ dialog.message }}
+    </p>
+  </div>
+  <div class="col-12 text-center">
+    <form [formGroup]="submitForm">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>{{ dialog.input.label }}</mat-label>
+        <input
+          matInput
+          [placeholder]="
+            dialog.input.placeholder ? dialog.input.placeholder : ''
+          "
+          formControlName="input"
+        />
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="my-1 text-center">
+    <button
+      [class]="
+        'mx-2 btn btn-' +
+        (btn.color ? btn.color : 'secondary') +
+        ' ' +
+        (btn.class ? btn.class : '')
+      "
+      *ngFor="let btn of dialog.buttons"
+      (click)="closeSubmit(btn.value)"
+    >
+      {{ btn.title | uppercase }}
+    </button>
+  </div>
+</div>

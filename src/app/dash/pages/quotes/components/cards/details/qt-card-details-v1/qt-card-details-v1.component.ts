@@ -26,6 +26,7 @@ import {
 } from '../../../modals/qt-update-status-v1/qt-update-status-v1.component';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { CollectionService } from '../../../../../collection/services/collection.service';
 
 @Component({
   selector: 'app-qt-card-details-v1',
@@ -64,12 +65,19 @@ export class QtCardDetailsV1Component implements OnInit {
     private contactsService: ContactsService,
     private quotesService: QuotesService,
     private companysService: CompanysService,
+    private collectionService: CollectionService,
     private dialogsService: DialogsService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.quotation;
+  }
+
+  convertStatusTrackerArray() {
+    return this.quotesService.convertStatusTrackerArray(
+      this.quotation.status_tracker || []
+    );
   }
 
   getPriority(priority: number): string {
@@ -97,7 +105,11 @@ export class QtCardDetailsV1Component implements OnInit {
     const afterUpdate = this.quotesService.setUpdateStatusWithDialogs(
       this.quotation._id ? this.quotation._id : '',
       status,
-      this.quotation.status_tracker ? this.quotation.status_tracker : [],
+      this.quotation.status_tracker
+        ? this.quotesService.convertStatusTrackerArray(
+            this.quotation.status_tracker
+          )
+        : [],
       message
     );
 
@@ -161,5 +173,9 @@ export class QtCardDetailsV1Component implements OnInit {
 
   openQuotationDesglose(quotation: string) {
     this.router.navigateByUrl('dash/quotes/resumen/' + quotation);
+  }
+
+  openAddPO() {
+    this.quotesService.openAddPO(this.quotation);
   }
 }

@@ -59,7 +59,7 @@
             openUpdateStatusDialog(
               quotation.quotation_no || '',
               quotation._id || '',
-              quotation.status_tracker || [],
+              convertStatusTrackerArray(),
               quotation.company.nickname,
               quotation.contact.name,
               quotation.description
@@ -68,6 +68,7 @@
         >
           Cambiar Estatus
         </button>
+        <button mat-menu-item (click)="openAddPO()">Registrar PO</button>
         <button mat-menu-item (click)="markAsFinished()">Finalizar</button>
         <button mat-menu-item disabled>Descargar PDF</button>
         <button mat-menu-item disabled>Visualizar PDF</button>
@@ -90,7 +91,7 @@
           openUpdateStatusDialog(
             quotation.quotation_no || '',
             quotation._id || '',
-            quotation.status_tracker || [],
+            convertStatusTrackerArray(),
             quotation.company.nickname,
             quotation.contact.name,
             quotation.description

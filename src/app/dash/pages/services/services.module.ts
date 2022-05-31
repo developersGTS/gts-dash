@@ -5,9 +5,11 @@ import { ServicesRoutingModule } from './services-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SerPreviewComponent } from './components/modals/ser-preview/ser-preview.component';
 import { AngularMaterialModule } from 'src/app/core/modules/angular-material/angular-material.module';
+import { ServicesComponent } from './services.component';
+
 
 @NgModule({
-  declarations: [SerPreviewComponent],
+  declarations: [SerPreviewComponent, ServicesComponent],
   imports: [
     CommonModule,
     ServicesRoutingModule,

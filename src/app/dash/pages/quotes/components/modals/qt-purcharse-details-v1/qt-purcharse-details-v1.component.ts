@@ -67,4 +67,8 @@ export class QtPurcharseDetailsV1Component implements OnInit {
       this.profit_percent = this.data.profit_percent;
     }
   }
+
+  deleteOption(index: number, confirmation: boolean) {
+    this.purcharseOptions.splice(index, 1);
+  }
 }

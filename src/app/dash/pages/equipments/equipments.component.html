@@ -1,1 +1,27 @@
-<p>equipments works!</p>
+<div class="row m-0">
+  <nav
+    mat-tab-nav-bar
+    class="position-fixed opacity-100 bg-white"
+    style="z-index: 1000"
+  >
+    <a
+      mat-tab-link
+      *ngFor="let link of navLinks"
+      [routerLink]="link.link"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [active]="rla.isActive"
+      linkToTop="true"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      {{ link.label }}
+    </a>
+  </nav>
+</div>
+<div class="row py-2 m-0 mt-5">
+  <router-outlet></router-outlet>
+</div>
+
+<button class="float-btn btn gts_gradient" (click)="addNewEquipment()">
+  <mat-icon class="h-100 w-100 text-white">add</mat-icon>
+</button>

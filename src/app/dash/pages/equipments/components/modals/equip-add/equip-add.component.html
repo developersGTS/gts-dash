@@ -1,0 +1,82 @@
+<form [formGroup]="formNewEquipment">
+  <div class="row m-0">
+    <div class="col-12">
+      <h6 class="text-uppercase">EQUIPO A REGISTRAR</h6>
+    </div>
+  </div>
+  <div class="row m-0">
+    <!-- COMPANY -->
+    <div class="col-12 col-lg-4">
+      <div class="row">
+        <div class="col-10">
+          <mat-form-field class="w-100 mb-0 pb-0" appearance="outline">
+            <mat-label>Cliente</mat-label>
+            <mat-select formControlName="company" required>
+              <mat-option
+                *ngFor="let company of companys"
+                [value]="company._id"
+                (click)="companyEvent(company)"
+              >
+                {{ company.nickname | uppercase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div
+            class="position-relative w-100"
+            style="height: 5px"
+            *ngIf="companys_loader"
+          >
+            <div
+              class="position-absolute translate-middle-y top-0 start-0 w-100 h-100"
+              style="z-index: 900; top: -15px !important"
+            >
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+          </div>
+        </div>
+        <div class="col-2 my-auto">
+          <mat-icon color="primary" (click)="openAddCompany()"
+            >add_circle</mat-icon
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="col-12 col-lg-4">
+      <div class="row">
+        <div class="col-10">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Contacto</mat-label>
+            <mat-select formControlName="contact" required>
+              <mat-option
+                *ngFor="let contact of contacts"
+                [value]="contact._id"
+                (click)="contactEvent(contact)"
+              >
+                {{ contact.name | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div
+            class="position-relative w-100"
+            style="height: 5px"
+            *ngIf="contacts_loader"
+          >
+            <div
+              class="position-absolute translate-middle-y top-0 start-0 w-100 h-100"
+              style="z-index: 900; top: -15px !important"
+            >
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+          </div>
+        </div>
+        <div class="col-2 my-auto">
+          <mat-icon color="primary" (click)="openAddContact()"
+            >add_circle</mat-icon
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -34,6 +34,7 @@ export class QtCardPurchaseOptionV1Component implements OnInit {
 
   @Output() emitOption: EventEmitter<PurcharseOption> = new EventEmitter();
   @Output() emitUpdateBestOption: EventEmitter<boolean> = new EventEmitter();
+  @Output() emitDeleteOption: EventEmitter<boolean> = new EventEmitter();
 
   constructor(public dialog: MatDialog) {}
 
@@ -45,6 +46,10 @@ export class QtCardPurchaseOptionV1Component implements OnInit {
 
   emitUpdateBestOptionFn() {
     this.emitUpdateBestOption.emit(true);
+  }
+
+  emitDelete() {
+    this.emitDeleteOption.emit(true);
   }
 
   openEditPurcharseOption(payload: PurcharseOption): void {

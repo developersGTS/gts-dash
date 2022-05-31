@@ -1,0 +1,68 @@
+<div
+  class="card p-2 shadow mb-4 border-secondary border-4 border-top-0 border-end-0 border-start-0"
+  *ngIf="equipment"
+>
+  <!-- HEADER -->
+  <div class="row">
+    <div class="col-4">
+      <span class="text-muted px-2">Creado el:</span><span>pending</span>
+    </div>
+    <div class="col-6">
+      <span class="text-muted px-2">Categoria:</span
+      ><span>{{
+        equipment.category_code ? equipment.category_code : "Sin categoria"
+      }}</span>
+    </div>
+    <div class="col-2 text-end">
+      <mat-icon> more_vert </mat-icon>
+    </div>
+  </div>
+  <!-- COMPANY & CONTACT -->
+  <div class="row m-0 p-2 mt-2">
+    <div class="col-4">
+      <h6>
+        {{ equipment.company.nickname | uppercase }}
+      </h6>
+    </div>
+    <div class="col-4">
+      <h6>
+        {{ equipment.contact.name | uppercase }}
+      </h6>
+    </div>
+  </div>
+  <!-- EQUIPMENT DETAILS -->
+  <div class="row m-0 pt-2">
+    <div class="col-4 py-1">
+      <span class="text-muted px-2">Equipo:</span
+      ><span>{{ equipment.equipment }}</span>
+    </div>
+    <div class="col-4 py-1">
+      <span class="text-muted px-2">Marca:</span
+      ><span>{{ equipment.brand }}</span>
+    </div>
+    <div class="col-4 py-1">
+      <span class="text-muted px-2">Modelo:</span
+      ><span>{{ equipment.model }}</span>
+    </div>
+    <div class="col-4 py-1">
+      <span class="text-muted px-2">No Parte:</span
+      ><span>{{ equipment.product_no }}</span>
+    </div>
+    <div class="col-4 py-1">
+      <span class="text-muted px-2">No Serie:</span
+      ><span class="fw-bold">{{ equipment.serial_no | uppercase }}</span>
+    </div>
+  </div>
+  <div class="row m-0 py-2">
+    <div class="col-3"></div>
+    <div class="col-3">
+      <button class="btn btn-dark w-100">Historial</button>
+    </div>
+    <div class="col-3">
+      <button class="btn btn-dark w-100">Programar Servicio</button>
+    </div>
+    <div class="col-3">
+      <button class="btn btn-dark w-100">Ingresar a Lab</button>
+    </div>
+  </div>
+</div>

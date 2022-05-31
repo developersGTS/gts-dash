@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { StatusTracker } from 'src/app/dash/interfaces/status_tracker.interface';
 import { QuotationPopulated } from '../../quotes/interfaces/quotation.interface';
-import { QuotesService } from '../../quotes/services/quotes.service';
+import { DialogsService } from 'src/app/core/services/dialogs.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,10 @@ export class CollectionService {
     'Finalizada',
   ];
 
-  constructor() {}
+  constructor(
+    public dialog: MatDialog,
+    private dialogsService: DialogsService
+  ) {}
 
   getColorByStatus(status: string): string {
     status = status.toLowerCase();

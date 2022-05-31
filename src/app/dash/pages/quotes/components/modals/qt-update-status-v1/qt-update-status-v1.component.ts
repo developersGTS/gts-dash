@@ -12,6 +12,7 @@ import { StatusTracker } from 'src/app/dash/interfaces/status_tracker.interface'
 import { CollectionService } from 'src/app/dash/pages/collection/services/collection.service';
 import { QuotationPopulated } from '../../../interfaces/quotation.interface';
 import { QuotesService } from '../../../services/quotes.service';
+import { StatusTrackerPopulated } from '../../../../../interfaces/status_tracker.interface';
 
 export interface UpdateStatusQuotationV1 {
   company: string;
