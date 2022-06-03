@@ -8,19 +8,7 @@ import { ServicePopulated } from '../../../interfaces/service.interface';
   styleUrls: ['./ser-preview.component.scss'],
 })
 export class SerPreviewComponent implements OnInit {
-  @Input() service: ServicePopulated = {
-    _id: '',
-    company: {
-      nickname: '',
-      profit_percent: 0.8,
-    },
-    contact: {
-      company: '',
-      name: '',
-    },
-    general_description: '',
-    status: '',
-  };
+  @Input() service: ServicePopulated | undefined = undefined;
 
   constructor(
     public dialogRef: MatDialogRef<SerPreviewComponent>,

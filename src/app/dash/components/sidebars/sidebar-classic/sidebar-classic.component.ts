@@ -33,13 +33,13 @@ export class SidebarClassicComponent implements OnInit {
     {
       title: 'Servicios',
       section: 'home',
-      url: '/dash/services',
+      url: '/dash/services/onsite',
       icon: 'construction',
     },
     {
       title: 'Laboratorio',
       section: 'home',
-      url: '/dash/services',
+      url: '/dash/services/lab',
       icon: 'store',
     },
     {

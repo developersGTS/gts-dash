@@ -1,0 +1,27 @@
+<div class="row m-0 p-2 pt-3">
+  <!-- FILTRO DE BUSQUEDA -->
+  <div class="col-12">
+    <app-ser-filter-v1
+      [services]="services"
+      (emitServicesFiltered)="applyFilter($event)"
+    ></app-ser-filter-v1>
+  </div>
+
+  <!-- BUSQUEDA -->
+  <div class="col-12 py-3">
+    <div class="row">
+      <div class="col-7"></div>
+      <div class="col-5">
+        <app-ser-searcher-v1
+          [services]="services"
+          (emitServicesFiltered)="applyFilter($event)"
+        ></app-ser-searcher-v1>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="col-12" *ngFor="let service of servicesView">
+    <app-ser-card-details-v1 [service]="service"></app-ser-card-details-v1>
+  </div>
+</div>

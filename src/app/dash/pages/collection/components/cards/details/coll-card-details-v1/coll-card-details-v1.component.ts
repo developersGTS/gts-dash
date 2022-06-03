@@ -163,47 +163,7 @@ export class CollCardDetailsV1Component implements OnInit {
   }
 
   markAsBilled() {
-    if (this.quotation.billed) {
-      this.dialogsService.openMessageBasicV1({
-        message:
-          'La CO ' +
-          (this.quotation.quotation_no
-            ? this.quotation.quotation_no
-            : this.quotation._id) +
-          ' ya ha sido marcada como pagada anteriormente.',
-        status: StatusMessage.info,
-      });
-    } else {
-      this.quotesService
-        .setUpdateStatusWithDialogs(
-          this.quotation._id,
-          'Pagada',
-          this.quotesService.convertStatusTrackerArray(
-            this.quotation.status_tracker || []
-          ) || [],
-          '¿Desea marcar la CO ' + this.quotation.quotation_no + ' como pagada?'
-        )
-        .subscribe((res) => {
-          res && res._id ? (this.quotation = res) : null;
-        });
-    }
-  }
-
-  markAsBillesd() {
-    this.quotesService
-      .setUpdateStatusWithDialogs(
-        this.quotation._id,
-        'Facturada',
-        this.quotesService.convertStatusTrackerArray(
-          this.quotation.status_tracker || []
-        ),
-        '¿Desea marcar la CO ' +
-          this.quotation.quotation_no +
-          ' como Facturada?'
-      )
-      .subscribe((res) => {
-        res && res._id ? (this.quotation = res) : null;
-      });
+    this.quotesService.openMarkAsBilled(this.quotation);
   }
 
   markAsInvoiced() {
@@ -218,5 +178,9 @@ export class CollCardDetailsV1Component implements OnInit {
 
   openAddPO() {
     this.quotesService.openAddPO(this.quotation);
+  }
+
+  openAddReceipt(){
+    this.quotesService.openAddReceipt(this.quotation);
   }
 }

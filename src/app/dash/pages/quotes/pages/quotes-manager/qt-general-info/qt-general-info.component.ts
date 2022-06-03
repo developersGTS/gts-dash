@@ -24,6 +24,7 @@ import { Quotation } from 'src/app/dash/pages/quotes/interfaces/quotation.interf
 import { PreviewData } from '../quotes-manager.component';
 import { QuotesService } from '../../../services/quotes.service';
 import { PriorityList } from '../../../interfaces/quotations_service_data.interface';
+import { ContactPopulated } from '../../../../contacts/interfaces/contact.interface';
 
 // INTERFACE PARA AUTOCOMPLETE
 export interface StateGroup {
@@ -59,7 +60,7 @@ export class QtGeneralInfoComponent implements OnInit {
   companys_loader: boolean = true;
 
   // CONTACTS
-  contacts: Contact[] = [];
+  contacts: ContactPopulated[] = [];
   contacts_loader: boolean = true;
 
   status: string[];
@@ -93,13 +94,13 @@ export class QtGeneralInfoComponent implements OnInit {
       [Validators.required],
     ],
     description: ['', [Validators.required]],
-    status: ['', [Validators.required]],
+    status: ['Pendiente', [Validators.required]],
     service: [{ value: '', disabled: this.services_loader }],
     date_end: [''],
     enabled: [true],
     invoice_required: [true],
     assign_to: [{ value: '', disabled: this.employees_loader }],
-    priority: ['', [Validators.required]],
+    priority: [0, [Validators.required]],
     supervisor_approved: [false],
     customer_approved: [false],
     in_collection: [false],
@@ -135,7 +136,7 @@ export class QtGeneralInfoComponent implements OnInit {
     this.contactsService
       .getContacts()
       .pipe(
-        map((res: Contact[]) => {
+        map((res: ContactPopulated[]) => {
           this.contacts = res;
           this.contacts_loader = false;
           this.formGeneralInfo.controls['contact'].enable();
@@ -157,7 +158,9 @@ export class QtGeneralInfoComponent implements OnInit {
 
     // LOAD SERVICES
     this.servicesService
-      .getServices()
+      .getServiceByCustom({
+        enabled: true,
+      })
       .pipe(
         map((res: ServicePopulated[]) => {
           this.services = res;
@@ -252,7 +255,9 @@ export class QtGeneralInfoComponent implements OnInit {
     this.emitQuotationInfo();
   }
 
-  contactEvent(contact: Contact) {
+  contactEvent(contact: ContactPopulated) {
+    this.formGeneralInfo.controls['company'].setValue(contact.company._id);
+    console.log('contact.company', contact.company);
     this.emitPreviewData.emit({ contact });
     this.emitQuotationInfo();
   }

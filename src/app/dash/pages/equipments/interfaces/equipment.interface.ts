@@ -56,3 +56,16 @@ export interface EquipmentPopulated {
   serial_no: string;
   notes?: Note[];
 }
+
+export interface EquipmentBySerial {
+  _id?: string;
+  company?: string;
+  contact?: string;
+  category_code?: string;
+  equipment?: string;
+  brand?: string;
+  model?: string;
+  product_no?: string;
+  serial_no: string;
+  notes?: Note[];
+}

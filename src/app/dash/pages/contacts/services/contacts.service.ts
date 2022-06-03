@@ -15,8 +15,8 @@ export class ContactsService {
   constructor(private http: HttpClient, public dialog: MatDialog) {}
 
   getContacts() {
-    return this.http.get<Contact[]>(`${this.api_base}`).pipe(
-      map((res: Contact[]) => {
+    return this.http.get<ContactPopulated[]>(`${this.api_base}`).pipe(
+      map((res: ContactPopulated[]) => {
         return res.sort(function (a, b) {
           if (a.name > b.name) {
             return 1;

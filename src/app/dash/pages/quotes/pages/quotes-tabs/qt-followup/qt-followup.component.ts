@@ -37,6 +37,9 @@ export class QtFollowupComponent implements OnInit {
           {
             status: 'En espera de material',
           },
+          {
+            status: 'En revision interna',
+          },
         ],
       })
       .pipe(

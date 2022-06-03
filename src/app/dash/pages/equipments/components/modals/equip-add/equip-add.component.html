@@ -15,7 +15,6 @@
               <mat-option
                 *ngFor="let company of companys"
                 [value]="company._id"
-                (click)="companyEvent(company)"
               >
                 {{ company.nickname | uppercase }}
               </mat-option>
@@ -52,7 +51,6 @@
               <mat-option
                 *ngFor="let contact of contacts"
                 [value]="contact._id"
-                (click)="contactEvent(contact)"
               >
                 {{ contact.name | titlecase }}
               </mat-option>
@@ -77,6 +75,75 @@
           >
         </div>
       </div>
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="col-4">
+      <!-- TODO: -->
+    </div>
+
+    <!-- EQUIPMENT -->
+    <div class="col-12 col-lg-4">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Equipo</mat-label>
+        <input
+          matInput
+          placeholder="Ej. Impresora"
+          formControlName="equipment"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- BRAND -->
+    <div class="col-12 col-lg-4">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Marca</mat-label>
+        <input matInput placeholder="Ej. Zebra" formControlName="brand" />
+      </mat-form-field>
+    </div>
+
+    <!-- MODEL -->
+    <div class="col-12 col-lg-4">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Modelo</mat-label>
+        <input matInput placeholder="Ej. ZT410" formControlName="model" />
+      </mat-form-field>
+    </div>
+
+    <!-- NO PARTE -->
+    <div class="col-12 col-lg-4">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>No Parte / Producto</mat-label>
+        <input
+          matInput
+          placeholder="Ej. ZT41042-T010000Z"
+          formControlName="no_part"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- NO SERIAL -->
+    <div class="col-12 col-lg-4">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>No Serie</mat-label>
+        <input
+          matInput
+          placeholder="18J181107943"
+          formControlName="no_serial"
+        />
+        <mat-error *ngIf="serialIsInvalid"> * Serie ya registrada </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row m-0 pt-3 pb-2">
+    <div class="col-4"></div>
+    <div class="col-4">
+      <button class="btn btn-danger w-100" [mat-dialog-close]="false">
+        Cancelar
+      </button>
+    </div>
+    <div class="col-4">
+      <button class="btn btn-dark w-100" (click)="saveEquipment()">Guardar</button>
     </div>
   </div>
 </form>

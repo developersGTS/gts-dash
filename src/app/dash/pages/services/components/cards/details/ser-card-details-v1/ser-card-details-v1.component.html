@@ -1,0 +1,102 @@
+<div
+  class="card p-2 shadow mb-4 border-secondary border-4 border-top-0 border-end-0 border-start-0"
+  *ngIf="service"
+>
+  <!-- HEADER -->
+  <div class="row m-0 py-2">
+    <div class="col-4">
+      <span class="text-muted me-2">Creado el:</span>
+      <span class="fw-bold">{{ service.date_created | date }}</span>
+    </div>
+    <div class="col-6">
+      <span class="text-muted me-2">Categoria:</span>
+      <span></span>
+    </div>
+    <div class="col-2 text-end">
+      <mat-icon class="c-pointer"> more_vert </mat-icon>
+    </div>
+  </div>
+
+  <!-- CLIENT, CONTACT STATUS & DESCRIPTION -->
+  <div class="row m-0 p-2">
+    <div class="col-4">
+      <h6
+        class="fs-6 text-uppercase c-pointer"
+        (click)="openCompanyPreview(service.company)"
+      >
+        {{ service.company.nickname | uppercase }}
+      </h6>
+    </div>
+    <div class="col-4">
+      <h6
+        class="fs-6 text-uppercase c-pointer"
+        (click)="openContactPreview(service.contact)"
+      >
+        {{ service.contact.name | uppercase }}
+      </h6>
+    </div>
+    <div class="col-4">
+      <span
+        [class]="
+          'badge bg-' +
+          getColorByStatus(service.status) +
+          ' w-100 py-2 fs-6 c-pointer ' +
+          (getColorByStatus(service.status) === 'warning' ? 'text-dark' : '')
+        "
+        (click)="openUpdateStatus()"
+      >
+        {{ service.status }}
+      </span>
+    </div>
+    <div class="col-12 py-3">
+      <p>
+        {{ service.general_description }}
+      </p>
+    </div>
+  </div>
+
+  <!-- EQUIPMENT -->
+  <div class="row m-0 p-2">
+    <div class="col-4 py-2">
+      <span class="text-muted me-2">Equipo:</span
+      ><span class="fw-bold">{{ service.equipment?.equipment || "" }}</span>
+    </div>
+    <div class="col-4 py-2">
+      <span class="text-muted me-2">Marca:</span
+      ><span class="fw-bold">{{ service.equipment?.brand || "" }}</span>
+    </div>
+    <div class="col-4 py-2">
+      <span class="text-muted me-2">Modelo:</span
+      ><span class="fw-bold">{{ service.equipment?.model || "" }}</span>
+    </div>
+    <div class="col-4 py-2">
+      <span class="text-muted me-2">No Producto:</span
+      ><span class="fw-bold">{{ service.equipment?.product_no || "" }}</span>
+    </div>
+    <div class="col-4 py-2">
+      <span class="text-muted me-2">No Serie:</span
+      ><span class="fw-bold">{{
+        service.equipment?.serial_no || "" | uppercase
+      }}</span>
+    </div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="row m-0 py-2">
+    <div class="col-2">
+      <button class="btn btn-dark w-100">NOTAS</button>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-dark w-100">PARTES INSTALADAS</button>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-dark w-100">PARTES REQUERIDAS</button>
+    </div>
+    <div class="col-3">
+      <button class="btn btn-dark w-100">REGISTRAR AVANCE</button>
+    </div>
+    <div class="col-3">
+      <button class="btn btn-dark w-100">ABRIR DESGLOSE</button>
+    </div>
+  </div>
+</div>

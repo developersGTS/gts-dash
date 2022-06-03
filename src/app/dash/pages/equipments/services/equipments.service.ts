@@ -9,6 +9,7 @@ import {
   EquipmentPopulated,
 } from '../interfaces/equipment.interface';
 import { EquipAddComponent } from '../components/modals/equip-add/equip-add.component';
+import { EquipmentBySerial } from '../interfaces/equipment.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +32,12 @@ export class EquipmentsService {
     return this.http.get<EquipmentPopulated>(`${this.api_base}/byid/${id}`);
   }
 
+  getEquipmentBySerial(serial: string) {
+    return this.http.get<EquipmentPopulated[]>(
+      `${this.api_base}/sch/${serial}`
+    );
+  }
+
   getEquipmentsByCustomFields(customFields: EquipmentSch | any) {
     return this.http.post<EquipmentPopulated[]>(
       `${this.api_base}/sch`,
@@ -38,14 +45,24 @@ export class EquipmentsService {
     );
   }
 
+  // =========================== CREATE EQUIPMENTS ===========================
+  createEquipment(equipment: Equipment) {
+    return this.http.post<EquipmentPopulated>(`${this.api_base}`, equipment);
+  }
+
   // =========================== MODALS ===========================
-  openNewEquipment() {
+  openNewEquipment(equipment?: EquipmentBySerial) {
+    console.log('equipment', equipment)
     const dialogRef = this.dialog.open(EquipAddComponent, {
       width: '90vw',
+      disableClose: true,
+      data: equipment,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-    });
+    return dialogRef;
+
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   console.log('The dialog was closed');
+    // });
   }
 }

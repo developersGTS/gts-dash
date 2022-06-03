@@ -116,7 +116,7 @@
       <div class="col-12 col-lg-6">
         <div class="row">
           <!-- DATE REQUEST -->
-          <div class="col-6">
+          <div class="col-4">
             <mat-form-field class="w-100" appearance="outline">
               <mat-label>Fecha de Solicitud</mat-label>
               <input
@@ -129,56 +129,15 @@
           </div>
 
           <!-- DATE END -->
-          <div class="col-6">
+          <div class="col-4">
             <mat-form-field class="w-100" appearance="outline">
               <mat-label>Fecha de Finalizacion</mat-label>
               <input matInput type="date" formControlName="date_end" />
             </mat-form-field>
           </div>
-        </div>
-        <div class="row">
-          <!-- SERVICE -->
-          <div class="col-12 col-lg-6">
-            <div class="row">
-              <div class="col-10">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>Servicio Asignado</mat-label>
-                  <mat-select formControlName="service">
-                    <mat-option
-                      *ngFor="let service of services"
-                      [value]="service._id"
-                      (click)="serviceEvent(service)"
-                    >
-                      {{
-                        service.company.nickname +
-                          " - " +
-                          service.general_description
-                      }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <div
-                  class="position-relative w-100"
-                  style="height: 5px"
-                  *ngIf="services_loader"
-                >
-                  <div
-                    class="position-absolute translate-middle-y top-0 start-0 w-100 h-100"
-                    style="z-index: 900; top: -15px !important"
-                  >
-                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                  </div>
-                </div>
-              </div>
-              <div class="col-2 my-auto">
-                <mat-icon class="bg-primary btn-rounded text-white">
-                  search
-                </mat-icon>
-              </div>
-            </div>
-          </div>
+
           <!-- EMPLOYEE -->
-          <div class="col-12 col-lg-6">
+          <div class="col-12 col-lg-4">
             <mat-form-field class="w-100" appearance="outline">
               <mat-label>Empleado Asignado</mat-label>
               <mat-select formControlName="assign_to">
@@ -201,6 +160,51 @@
                 style="z-index: 900; top: -15px !important"
               >
                 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
+            </div>
+          </div>
+
+          <!-- SERVICE -->
+          <div class="col-12 col-lg-12">
+            <div class="row">
+              <div class="col-11">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Servicio Asignado</mat-label>
+                  <mat-select formControlName="service">
+                    <mat-option
+                      *ngFor="let service of services"
+                      [value]="service._id"
+                      (click)="serviceEvent(service)"
+                    >
+                      {{
+                        (service.company.nickname | uppercase) +
+                          "  -  " +
+                          (service.equipment?.brand | uppercase) +
+                          " - " +
+                          (service.general_description | titlecase) +
+                          " - " +
+                          (service.equipment?.serial_no | uppercase)
+                      }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div
+                  class="position-relative w-100"
+                  style="height: 5px"
+                  *ngIf="services_loader"
+                >
+                  <div
+                    class="position-absolute translate-middle-y top-0 start-0 w-100 h-100"
+                    style="z-index: 900; top: -15px !important"
+                  >
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                  </div>
+                </div>
+              </div>
+              <div class="col-1 m-auto">
+                <mat-icon class="bg-primary btn-rounded text-white">
+                  search
+                </mat-icon>
               </div>
             </div>
           </div>

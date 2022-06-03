@@ -16,6 +16,9 @@
           [placeholder]="
             dialog.input.placeholder ? dialog.input.placeholder : ''
           "
+          [type]="
+            dialog.config && dialog.config.type ? dialog.config.type : 'text'
+          "
           formControlName="input"
         />
       </mat-form-field>

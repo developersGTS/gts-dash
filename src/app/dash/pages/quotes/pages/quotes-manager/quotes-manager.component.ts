@@ -9,13 +9,13 @@ import {
 } from '../../interfaces/quotation_item.interfaces';
 import { Note } from 'src/app/dash/interfaces/note.interface';
 import { Company } from '../../../companys/interfaces/company.interface';
-import { Contact } from '../../../contacts/interfaces/contact.interface';
+import { Contact, ContactPopulated } from '../../../contacts/interfaces/contact.interface';
 import { ServicePopulated } from '../../../services/interfaces/service.interface';
 import { User } from '../../../users/interfaces/user.interface';
 
 export interface PreviewData {
   company?: Company;
-  contact?: Contact;
+  contact?: ContactPopulated;
   user?: User;
   service?: ServicePopulated;
 }

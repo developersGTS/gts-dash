@@ -17,6 +17,7 @@ import {
 } from '../interfaces/quotation.interface';
 import { PriorityList } from '../interfaces/quotations_service_data.interface';
 import { StatusTrackerPopulated } from '../../../interfaces/status_tracker.interface';
+import { TypeInputs } from 'src/app/core/components/dialogs/dg-submit-v1/dg-submit-v1.component';
 
 @Injectable({
   providedIn: 'root',
@@ -467,5 +468,294 @@ export class QuotesService {
         });
       }
     });
+  }
+
+  openAddReceipt(quotation: QuotationPopulated) {
+    const confirmationRef = this.dialogsService.openConfirmationV1({
+      title:
+        '¿Desea agregar un contrarecibo a la CO ' +
+        quotation.quotation_no +
+        ' ?',
+      buttons: [
+        {
+          title: 'Cancelar',
+          value: false,
+          color: 'secondary',
+        },
+        {
+          title: 'Confirmar',
+          value: true,
+          color: 'success',
+        },
+      ],
+    });
+
+    confirmationRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const inputResult = this.dialogsService.openSubmitV1({
+          title: 'Contrarecibo',
+          message: 'Ingrese el folio del contrarecibo',
+          buttons: [
+            {
+              title: 'Cancelar',
+              value: false,
+              color: 'secondary',
+            },
+            {
+              title: 'Guardar',
+              value: true,
+              color: 'success',
+            },
+          ],
+          input: {
+            label: 'No Contrarecibo',
+          },
+        });
+
+        inputResult.afterClosed().subscribe((resultInput) => {
+          console.log('resultInput', resultInput);
+          if (resultInput) {
+            if (quotation.collection_data) {
+              quotation.collection_data.receipt = resultInput;
+            } else {
+              quotation.collection_data = {
+                expenses: 0,
+                profits: 0,
+                iva: 0,
+                subtotal: 0,
+                total: 0,
+                receipt: resultInput,
+              };
+            }
+
+            // TODO: CAPTURAR PROX. FECHA DE PAGO
+
+            const dateResult = this.dialogsService.openSubmitV1({
+              title: 'Pago Programado',
+              message: 'Ingrese la fecha programada para pago',
+              buttons: [
+                {
+                  title: 'Cancelar',
+                  value: false,
+                  color: 'secondary',
+                },
+                {
+                  title: 'Guardar',
+                  value: true,
+                  color: 'success',
+                },
+              ],
+              input: {
+                label: 'No Contrarecibo',
+              },
+              config: {
+                type: TypeInputs.date,
+              },
+            });
+
+            dateResult.afterClosed().subscribe((dateResult) => {
+              if (dateResult) {
+                if (quotation.collection_data) {
+                  quotation.collection_data.programmed_payment = dateResult;
+                }
+
+                // SALVAR EN BASE DE DATOS
+
+                this.updateQuotation({
+                  _id: quotation._id,
+                  collection_data: quotation.collection_data,
+                })
+                  .pipe(
+                    switchMap((resultUpdate) =>
+                      this.updateStatus(
+                        quotation._id,
+                        'Contrarecibo programado',
+                        this.convertStatusTrackerArray(
+                          quotation.status_tracker || []
+                        )
+                      )
+                    )
+                  )
+                  .subscribe((result) => {
+                    console.log('result', result);
+                    if (result) {
+                      this.dialogsService.openNotificationV1({
+                        message: 'Contrarecibo agregado correctamente',
+                        status: StatusMessage.success,
+                      });
+                    } else {
+                      this.dialogsService.openNotificationV1({
+                        message: 'Error al agregar Contrarecibo',
+                        status: StatusMessage.danger,
+                      });
+                    }
+                  });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  openMarkAsBilled(quotation: QuotationPopulated) {
+    if (quotation.billed) {
+      this.dialogsService.openMessageBasicV1({
+        message:
+          'La CO ' +
+          (quotation.quotation_no ? quotation.quotation_no : quotation._id) +
+          ' ya ha sido marcada como pagada anteriormente.',
+        status: StatusMessage.info,
+      });
+    } else {
+      const confirmationRef = this.dialogsService.openConfirmationV1({
+        title:
+          '¿Desea marcar la CO ' + quotation.quotation_no + ' como pagada?',
+        buttons: [
+          {
+            title: 'Cancelar',
+            value: false,
+            color: 'secondary',
+          },
+          {
+            title: 'Confirmar',
+            value: true,
+            color: 'success',
+          },
+        ],
+      });
+
+      confirmationRef.afterClosed().subscribe((result) => {
+        if (result) {
+          const inputResult = this.dialogsService.openSubmitV1({
+            title: 'Metodo de pago',
+            message: 'Ingrese la forma de pago realizada',
+            buttons: [
+              {
+                title: 'Cancelar',
+                value: false,
+                color: 'secondary',
+              },
+              {
+                title: 'Guardar',
+                value: true,
+                color: 'success',
+              },
+            ],
+            input: {
+              label: 'Metodo de pago',
+            },
+          });
+
+          inputResult.afterClosed().subscribe((resultInput) => {
+            console.log('resultInput', resultInput);
+            if (resultInput) {
+              if (quotation.collection_data) {
+                quotation.collection_data.payment_method = resultInput;
+              } else {
+                quotation.collection_data = {
+                  expenses: 0,
+                  profits: 0,
+                  iva: 0,
+                  subtotal: 0,
+                  total: 0,
+                  payment_method: resultInput,
+                };
+              }
+
+              // CAPTURAR PROX. FECHA DE PAGO
+
+              const dateResult = this.dialogsService.openSubmitV1({
+                title: 'Fecha de Pago',
+                message: 'Ingrese la fecha del pago',
+                buttons: [
+                  {
+                    title: 'Cancelar',
+                    value: false,
+                    color: 'secondary',
+                  },
+                  {
+                    title: 'Guardar',
+                    value: true,
+                    color: 'success',
+                  },
+                ],
+                input: {
+                  label: 'Fecha de Pago',
+                },
+                config: {
+                  type: TypeInputs.date,
+                },
+              });
+
+              dateResult.afterClosed().subscribe((dateResult) => {
+                if (dateResult) {
+                  if (quotation.collection_data) {
+                    quotation.collection_data.payment_date = dateResult;
+                  }
+
+                  // SALVAR EN BASE DE DATOS
+
+                  this.updateQuotation({
+                    _id: quotation._id,
+                    collection_data: quotation.collection_data,
+                    billed: true,
+                  })
+                    .pipe(
+                      switchMap((resultUpdate) =>
+                        this.updateStatus(
+                          quotation._id,
+                          'Pagada',
+                          this.convertStatusTrackerArray(
+                            quotation.status_tracker || []
+                          )
+                        )
+                      )
+                    )
+                    .subscribe((result) => {
+                      console.log('result', result);
+                      if (result) {
+                        this.dialogsService.openNotificationV1({
+                          message: 'Pago agregado correctamente',
+                          status: StatusMessage.success,
+                        });
+
+                        quotation.status = 'Pagada';
+                        quotation.billed = true;
+                      } else {
+                        this.dialogsService.openNotificationV1({
+                          message: 'Error al agregar Pago',
+                          status: StatusMessage.danger,
+                        });
+                      }
+                    });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  }
+
+  test(quotation: QuotationPopulated) {
+    if (quotation.billed) {
+      this.dialogsService.openMessageBasicV1({
+        message:
+          'La CO ' +
+          (quotation.quotation_no ? quotation.quotation_no : quotation._id) +
+          ' ya ha sido marcada como pagada anteriormente.',
+        status: StatusMessage.info,
+      });
+    } else {
+      this.setUpdateStatusWithDialogs(
+        quotation._id,
+        'Pagada',
+        this.convertStatusTrackerArray(quotation.status_tracker || []) || [],
+        '¿Desea marcar la CO ' + quotation.quotation_no + ' como pagada?'
+      ).subscribe((res) => {
+        res && res._id ? (quotation = res) : null;
+      });
+    }
   }
 }

@@ -1,136 +1,148 @@
-<div class="row">
-  <div class="col-12 text-end">
-    <mat-icon>more_vert</mat-icon>
+<div class="row m-0" *ngIf="service">
+  <div class="row m-0">
+    <div class="col-12 text-end">
+      <mat-icon>more_vert</mat-icon>
+    </div>
   </div>
-</div>
-<div class="row mt-1">
-  <div class="col-12 col-lg-8">
-    <span class="fs-5 fw-bold">{{ service.company.nickname | uppercase }}</span>
-    -
-    <span class="fs-5 fw-bold">{{ service.contact.name | uppercase }}</span>
-  </div>
-  <div class="col-6 col-lg-2 text-center">
-    <p>
-      <span class="text-muted">ORDS:</span>
-      <span class="px-2">{{
-        service.service_order ? service.service_order : ""
+  <div class="row mt-1">
+    <div class="col-12 col-lg-8">
+      <span class="fs-5 fw-bold">{{
+        service.company.nickname | uppercase
       }}</span>
-    </p>
+      -
+      <span class="fs-5 fw-bold">{{ service.contact.name | uppercase }}</span>
+    </div>
+    <div class="col-6 col-lg-2 text-center">
+      <p>
+        <span class="text-muted">ORDS:</span>
+        <span class="px-2">{{
+          service.service_order ? service.service_order : ""
+        }}</span>
+      </p>
+    </div>
+    <div class="col-6 col-lg-2 text-end">
+      <p>{{ service.date_created ? (service.date_created | date) : "" }}</p>
+    </div>
   </div>
-  <div class="col-6 col-lg-2 text-end">
-    <p>{{ service.date_created ? (service.date_created | date) : "" }}</p>
+
+  <!-- DATOS DEL EQUIPO -->
+  <div class="row mb-4 mt-4" *ngIf="service.equipment">
+    <div class="col-12">
+      <h6 class="text-muted text-uppercase fw-bold">DATOS DEL EQUIPO:</h6>
+    </div>
+    <div class="col-12 col-lg-3">
+      <p>
+        <span class="text-muted">Equipo:</span
+        ><span class="px-2">{{
+          service.equipment.equipment ? service.equipment.equipment : ""
+        }}</span>
+      </p>
+    </div>
+    <div class="col-12 col-lg-3">
+      <p>
+        <span class="text-muted">Marca:</span
+        ><span class="px-2">{{
+          service.equipment.brand ? service.equipment.brand : ""
+        }}</span>
+      </p>
+    </div>
+    <div class="col-12 col-lg-3">
+      <p>
+        <span class="text-muted">Modelo:</span
+        ><span class="px-2">{{
+          service.equipment.model ? service.equipment.model : ""
+        }}</span>
+      </p>
+    </div>
+    <div class="col-12 col-lg-3">
+      <p>
+        <span class="text-muted">No. Serie:</span
+        ><span class="px-2">{{
+          service.equipment.serial_no ? service.equipment.serial_no : ""
+        }}</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- DESCRIPCION GENERAL - ESTATUS -->
+  <div class="row my-4">
+    <div class="col-12 col-lg-6">
+      <h6 class="text-muted text-uppercase fw-bold">DESCRIPCION GENERAL:</h6>
+      <div>
+        <p>
+          {{ service.general_description ? service.general_description : "" }}
+        </p>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <h6 class="text-muted text-uppercase fw-bold">ESTATUS:</h6>
+      <div>
+        <p>
+          {{ service.status ? service.status : "" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESCRIPCION DEL PROBLEMA - DIAGNOSTICO -->
+  <div class="row my-4">
+    <div class="col-12 col-lg-6" *ngIf="service.problem_description">
+      <h6 class="text-muted text-uppercase fw-bold">
+        DESCRIPCION DEL PROBLEMA:
+      </h6>
+      <div>
+        <p>
+          {{ service.problem_description ? service.problem_description : "" }}
+        </p>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6" *ngIf="service.diagnostic">
+      <h6 class="text-muted text-uppercase fw-bold">DIAGNOSTICO:</h6>
+      <div>
+        <p>
+          {{ service.diagnostic ? service.diagnostic : "" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!--  -->
+  <div class="row my-4" *ngIf="service.repair_description">
+    <div class="col-12">
+      <h6 class="text-muted text-uppercase fw-bold">
+        DESCRIPCION DE REPARACION:
+      </h6>
+      <div>
+        <p>
+          {{ service.repair_description ? service.repair_description : "" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FECHA DE ENTREGA - TECNICO -->
+  <div class="row my-4">
+    <div class="col-12 col-lg-6" *ngIf="service.date_delivery">
+      <p>
+        <span class="text-muted">Fecha de Entrega:</span
+        ><span class="px-2">{{
+          service.date_delivery ? service.date_delivery : ""
+        }}</span>
+      </p>
+    </div>
+    <div class="col-12 col-lg-6" *ngIf="service.assign_to">
+      <p>
+        <span class="text-muted">Tecnico:</span
+        ><span class="px-2">{{
+          service.assign_to ? service.assign_to : ""
+        }}</span>
+      </p>
+    </div>
   </div>
 </div>
-
-<!-- DATOS DEL EQUIPO -->
-<div class="row mb-4 mt-4" *ngIf="service.equipment">
+<div class="row m-0" *ngIf="!service">
   <div class="col-12">
-    <h6 class="text-muted text-uppercase fw-bold">DATOS DEL EQUIPO:</h6>
-  </div>
-  <div class="col-12 col-lg-3">
-    <p>
-      <span class="text-muted">Equipo:</span
-      ><span class="px-2">{{
-        service.equipment.equipment ? service.equipment.equipment : ""
-      }}</span>
-    </p>
-  </div>
-  <div class="col-12 col-lg-3">
-    <p>
-      <span class="text-muted">Marca:</span
-      ><span class="px-2">{{
-        service.equipment.brand ? service.equipment.brand : ""
-      }}</span>
-    </p>
-  </div>
-  <div class="col-12 col-lg-3">
-    <p>
-      <span class="text-muted">Modelo:</span
-      ><span class="px-2">{{
-        service.equipment.model ? service.equipment.model : ""
-      }}</span>
-    </p>
-  </div>
-  <div class="col-12 col-lg-3">
-    <p>
-      <span class="text-muted">No. Serie:</span
-      ><span class="px-2">{{
-        service.equipment.serial_no ? service.equipment.serial_no : ""
-      }}</span>
-    </p>
-  </div>
-</div>
-
-<!-- DESCRIPCION GENERAL - ESTATUS -->
-<div class="row my-4">
-  <div class="col-12 col-lg-6">
-    <h6 class="text-muted text-uppercase fw-bold">DESCRIPCION GENERAL:</h6>
-    <div>
-      <p>
-        {{ service.general_description ? service.general_description : "" }}
-      </p>
-    </div>
-  </div>
-  <div class="col-12 col-lg-6">
-    <h6 class="text-muted text-uppercase fw-bold">ESTATUS:</h6>
-    <div>
-      <p>
-        {{ service.status ? service.status : "" }}
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- DESCRIPCION DEL PROBLEMA - DIAGNOSTICO -->
-<div class="row my-4">
-  <div class="col-12 col-lg-6" *ngIf="service.problem_description">
-    <h6 class="text-muted text-uppercase fw-bold">DESCRIPCION DEL PROBLEMA:</h6>
-    <div>
-      <p>
-        {{ service.problem_description ? service.problem_description : "" }}
-      </p>
-    </div>
-  </div>
-  <div class="col-12 col-lg-6" *ngIf="service.diagnostic">
-    <h6 class="text-muted text-uppercase fw-bold">DIAGNOSTICO:</h6>
-    <div>
-      <p>
-        {{ service.diagnostic ? service.diagnostic : "" }}
-      </p>
-    </div>
-  </div>
-</div>
-
-<!--  -->
-<div class="row my-4" *ngIf="service.repair_description">
-  <div class="col-12">
-    <h6 class="text-muted text-uppercase fw-bold">
-      DESCRIPCION DE REPARACION:
-    </h6>
-    <div>
-      <p>
-        {{ service.repair_description ? service.repair_description : "" }}
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- FECHA DE ENTREGA - TECNICO -->
-<div class="row my-4">
-  <div class="col-12 col-lg-6" *ngIf="service.date_delivery">
-    <p>
-      <span class="text-muted">Fecha de Entrega:</span
-      ><span class="px-2">{{
-        service.date_delivery ? service.date_delivery : ""
-      }}</span>
-    </p>
-  </div>
-  <div class="col-12 col-lg-6" *ngIf="service.assign_to">
-    <p>
-      <span class="text-muted">Tecnico:</span
-      ><span class="px-2">{{
-        service.assign_to ? service.assign_to : ""
-      }}</span>
-    </p>
+    <h6>Cargando Servicio</h6>
+    <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
   </div>
 </div>

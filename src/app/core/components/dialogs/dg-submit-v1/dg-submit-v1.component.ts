@@ -11,6 +11,14 @@ export interface DgSubmitV1 {
     placeholder?: string;
     value?: string;
   };
+  config?: {
+    type: TypeInputs;
+  }
+}
+
+export enum TypeInputs {
+  text = "text",
+  date = "date"
 }
 
 interface ButtonSubmit {
@@ -37,6 +45,9 @@ export class DgSubmitV1Component implements OnInit {
     input: {
       label: 'label',
     },
+    config: {
+      type: TypeInputs.text
+    }
   };
 
   submitForm = this._fb.group({
