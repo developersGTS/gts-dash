@@ -221,7 +221,8 @@ export class SerAddComponent implements OnInit {
           enabled: true,
         })
         .subscribe((res) => {
-          res
+          console.log('res v', res);
+          res && res.length > 0
             ? (this.equipmentRegistered = true)
             : (this.equipmentRegistered = false);
         });

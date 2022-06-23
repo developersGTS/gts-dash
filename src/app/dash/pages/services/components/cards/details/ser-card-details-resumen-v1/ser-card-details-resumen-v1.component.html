@@ -35,7 +35,7 @@
       </mat-icon>
       <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="openOrdsAdd()">Agregar ORDS</button>
-        <button mat-menu-item (click)="openSendToQuotation()">
+        <button mat-menu-item (click)="openOrdsAdd()">
           Enviar a cotizacion
         </button>
       </mat-menu>
@@ -108,20 +108,19 @@
 
   <!-- BUTTONS -->
   <div class="row m-0 py-2">
-    <div class="col-2">
+    <div class="col-4">
       <button class="btn btn-dark w-100">NOTAS</button>
     </div>
-    <div class="col-2">
+    <div class="col-4">
       <button class="btn btn-dark w-100">PARTES INSTALADAS</button>
     </div>
-    <div class="col-2">
+    <div class="col-4">
       <button class="btn btn-dark w-100">PARTES REQUERIDAS</button>
     </div>
-    <div class="col-3">
-      <button class="btn btn-dark w-100">REGISTRAR AVANCE</button>
-    </div>
-    <div class="col-3">
-      <button class="btn btn-dark w-100">ABRIR DESGLOSE</button>
+    <div class="col-12 p-2">
+      <button class="btn btn-primary w-100" (click)="emitId()">
+        SELECCIONAR
+      </button>
     </div>
   </div>
 </div>

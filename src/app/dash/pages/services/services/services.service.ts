@@ -11,12 +11,15 @@ import {
   UpdateStatusServiceV1,
 } from '../components/modals/ser-update-status-v1/ser-update-status-v1.component';
 import { ServiceStatus } from '../interfaces/service-status.interface';
+import { DialogsService } from '../../../../core/services/dialogs.service';
 import {
   Service,
   ServicePopulated,
   ServiceSch,
   ServiceUpdate,
 } from '../interfaces/service.interface';
+import { StatusMessage } from 'src/app/core/interfaces/dialogs.interface';
+import { SerSelectServiceByFilterV1Component } from '../components/modals/ser-select-service-by-filter-v1/ser-select-service-by-filter-v1.component';
 
 @Injectable({
   providedIn: 'root',
@@ -27,20 +30,24 @@ export class ServicesService {
   private status: string[] = [
     ServiceStatus.pendiente,
     ServiceStatus.diagnostico,
+    ServiceStatus.cotizacion,
     ServiceStatus.espera_autorizacion,
-    ServiceStatus.espera_partes,
     ServiceStatus.reparacion_autorizada,
     ServiceStatus.rechazado,
+    ServiceStatus.espera_partes,
     ServiceStatus.reparado,
     ServiceStatus.listo_entrega,
     ServiceStatus.equipo_entregado,
     ServiceStatus.servicio_realizado,
-    ServiceStatus.cotizacion,
     ServiceStatus.cobro,
     ServiceStatus.finalizado,
   ];
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {}
+  constructor(
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private dialogsService: DialogsService
+  ) {}
 
   // ===================== GETS =====================
 
@@ -86,7 +93,7 @@ export class ServicesService {
       case ServiceStatus.espera_partes:
         return 'warning';
       case ServiceStatus.reparacion_autorizada:
-        return 'success';
+        return 'primary';
       case ServiceStatus.rechazado:
         return 'danger';
       case ServiceStatus.reparado:
@@ -225,5 +232,74 @@ export class ServicesService {
       data,
     });
     return dialogRef;
+  }
+
+  openOrdsAdd(service: ServicePopulated) {
+    const ref = this.dialogsService.openConfirmationV1({
+      title: '¿Desea agregar una orden de servicio?',
+      buttons: [
+        {
+          title: 'cancel',
+          value: false,
+        },
+        {
+          title: 'confirmar',
+          value: true,
+          color: 'success',
+        },
+      ],
+    });
+
+    ref.afterClosed().subscribe((res) => {
+      if (res) {
+        const refORDS = this.dialogsService.openSubmitV1({
+          title: 'Ingrese el numero de orden de servicio',
+          input: {
+            label: 'No ORDS',
+          },
+          buttons: [
+            {
+              title: 'cancel',
+              value: false,
+            },
+            {
+              title: 'guardar',
+              value: true,
+              color: 'success',
+            },
+          ],
+        });
+
+        refORDS.afterClosed().subscribe((resOrds) => {
+          if (resOrds) {
+            this.updateService({
+              _id: service._id,
+              service_order: resOrds,
+            }).subscribe((service_updated) => {
+              if (service_updated && service_updated._id) {
+                service = service_updated;
+                this.dialogsService.openNotificationV1({
+                  message: 'ORDS agregada correctamente',
+                  status: StatusMessage.success,
+                });
+              } else {
+                this.dialogsService.openNotificationV1({
+                  message: 'La ORDS no se agrego correctamente',
+                  status: StatusMessage.danger,
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  openSelectService() {
+    return this.dialog.open(SerSelectServiceByFilterV1Component, {
+      width: '95vw',
+      height: '95vh',
+      disableClose: true
+    });
   }
 }

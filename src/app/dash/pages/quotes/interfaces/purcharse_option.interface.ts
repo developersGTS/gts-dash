@@ -1,3 +1,4 @@
+import { modeEditPurcharseOptionsV1 } from '../components/modals/qt-purcharse-details-v1/qt-purcharse-details-v1.component';
 import { Import } from './import.interface';
 
 export interface PurcharseOption {
@@ -27,4 +28,5 @@ export interface PurcharseOption {
 export interface PurcharseOptionWithClientProfit {
   data: PurcharseOption[];
   profit_percent: number;
+  mode_edit?: modeEditPurcharseOptionsV1
 }

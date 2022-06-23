@@ -1,0 +1,61 @@
+<div class="row p-2 m-0">
+  <div class="col-12 mb-3 text-end">
+    <mat-icon class="c-pointer" mat-dialog-close>close</mat-icon>
+  </div>
+
+  <!-- BUSCADORES Y FULTROS -->
+  <div class="col-12" style="height: 20vh !important">
+    <!-- FILTROS -->
+    <app-ser-filter-v1
+      [services]="services"
+      (emitServicesFiltered)="applyFilter($event)"
+    ></app-ser-filter-v1>
+    <div class="row pt-3 pb-2">
+      <div class="col-6"></div>
+      <div class="col-6">
+        <!-- BUSCADOR -->
+        <app-ser-searcher-v1
+          [services]="services"
+          (emitServicesFiltered)="applyFilter($event)"
+        ></app-ser-searcher-v1>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12" style="height: 70vh !important">
+    <perfect-scrollbar style="height: 100% !important">
+      <ng-content
+        *ngIf="service_selected; then card_services_selected; else all"
+      ></ng-content>
+
+      <ng-template #card_services_selected>
+        <app-ser-card-details-resumen-v1
+          (emitServiceId)="select_service($event)"
+          *ngIf="service_selected"
+          [service]="service_selected"
+        ></app-ser-card-details-resumen-v1>
+        <div class="row mt-5">
+          <div class="col-12 text-end">
+            <button class="btn btn-secondary mx-2">VOLVER A LISTA</button>
+            <button
+              class="btn btn-success mx-2"
+              [mat-dialog-close]="
+                service_selected ? service_selected._id : null
+              "
+            >
+              CONFIRMAR SERVICIO
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #all>
+        <app-ser-card-details-resumen-v1
+          (emitServiceId)="select_service($event)"
+          [service]="service"
+          *ngFor="let service of servicesView"
+        ></app-ser-card-details-resumen-v1>
+      </ng-template>
+    </perfect-scrollbar>
+  </div>
+</div>

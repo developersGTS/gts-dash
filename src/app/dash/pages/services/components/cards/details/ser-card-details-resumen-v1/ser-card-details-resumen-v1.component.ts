@@ -1,24 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ServicePopulated } from '../../../../interfaces/service.interface';
+import { QuotationPopulated } from '../../../../../quotes/interfaces/quotation.interface';
 import { ServicesService } from '../../../../services/services.service';
+import { CompanysService } from '../../../../../companys/services/companys.service';
+import { ContactsService } from '../../../../../contacts/services/contacts.service';
+import { QuotesService } from '../../../../../quotes/services/quotes.service';
 import { Company } from '../../../../../companys/interfaces/company.interface';
-import { ContactPopulated } from 'src/app/dash/pages/contacts/interfaces/contact.interface';
-import { CompanysService } from 'src/app/dash/pages/companys/services/companys.service';
-import { ContactsService } from 'src/app/dash/pages/contacts/services/contacts.service';
-import {
-  Quotation,
-  QuotationPopulated,
-} from '../../../../../quotes/interfaces/quotation.interface';
-import { QuotesService } from 'src/app/dash/pages/quotes/services/quotes.service';
-import { I } from '@angular/cdk/keycodes';
-import { ServiceStatus } from '../../../../interfaces/service-status.interface';
+import { ContactPopulated } from '../../../../../contacts/interfaces/contact.interface';
 
 @Component({
-  selector: 'app-ser-card-details-v1',
-  templateUrl: './ser-card-details-v1.component.html',
-  styleUrls: ['./ser-card-details-v1.component.scss'],
+  selector: 'app-ser-card-details-resumen-v1',
+  templateUrl: './ser-card-details-resumen-v1.component.html',
+  styleUrls: ['./ser-card-details-resumen-v1.component.scss'],
 })
-export class SerCardDetailsV1Component implements OnInit {
+export class SerCardDetailsResumenV1Component implements OnInit {
   @Input() service: ServicePopulated = {
     _id: '',
     company: {
@@ -37,6 +32,8 @@ export class SerCardDetailsV1Component implements OnInit {
     general_description: '',
     status: '',
   };
+
+  @Output() emitServiceId: EventEmitter<string> = new EventEmitter();
 
   quotations: QuotationPopulated[] = [];
 
@@ -110,22 +107,8 @@ export class SerCardDetailsV1Component implements OnInit {
     this.servicesService.openOrdsAdd(this.service);
   }
 
-  openSendToQuotation() {
-    this.quotesService
-      .createQuotationByService(this.service)
-      .subscribe((res: any) => {
-        if (res) {
-          this.quotations.push(res);
-          this.servicesService
-            .updateStatus(
-              this.service._id,
-              ServiceStatus.cotizacion,
-              this.service.status_tracker || []
-            )
-            .subscribe((resSer) =>
-              resSer && resSer._id ? (this.service = resSer) : null
-            );
-        }
-      });
+  emitId() {
+    console.log('emitId', this.service._id);
+    this.emitServiceId.emit(this.service._id);
   }
 }

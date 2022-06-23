@@ -83,6 +83,14 @@ export class QtSearcherV1Component implements OnInit {
 
     // BUSCAR EN SERVICIO
     if (quotation.service) {
+      // NO ORDS - SERVICE ORDER
+      if (
+        quotation.service.service_order &&
+        quotation.service.service_order.toLowerCase().includes(key)
+      ) {
+        return true;
+      }
+
       // DESCRIPCION DEL SERVICIO
       if (quotation.service.general_description.toLowerCase().includes(key)) {
         return true;

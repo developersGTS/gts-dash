@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { map, Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap, tap, Subscription } from 'rxjs';
 import { DgConfirmationV1 } from 'src/app/core/components/dialogs/dg-confirmation-v1/dg-confirmation-v1.component';
 import { StatusMessage } from 'src/app/core/interfaces/dialogs.interface';
 import { DialogsService } from 'src/app/core/services/dialogs.service';
@@ -18,6 +18,7 @@ import {
 import { PriorityList } from '../interfaces/quotations_service_data.interface';
 import { StatusTrackerPopulated } from '../../../interfaces/status_tracker.interface';
 import { TypeInputs } from 'src/app/core/components/dialogs/dg-submit-v1/dg-submit-v1.component';
+import { ServicePopulated } from '../../services/interfaces/service.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -77,9 +78,89 @@ export class QuotesService {
     );
   }
 
+  getQuotationsByCustomFieldsWithCustomRes(customFields: {
+    sch: QuotationSch | any;
+    res: string;
+  }) {
+    return this.http.post<QuotationPopulated[]>(
+      `${this.api_base}/sch-res`,
+      customFields
+    );
+  }
+
   // =========================== CREATE QUOTATIONS ===========================
   newQuotation(payload: Quotation) {
     return this.http.post(`${this.api_base}`, payload);
+  }
+
+  createQuotationByService(service: ServicePopulated) {
+    return new Observable((ob) => {
+      const confirm = this.dialogsService.openConfirmationV1({
+        title: '¿Desea enviar a cotizar este servicio?',
+        buttons: [
+          {
+            title: 'Cancelar',
+            value: false,
+          },
+          {
+            title: 'Confirmar',
+            value: true,
+            color: 'success',
+          },
+        ],
+      });
+
+      confirm.afterClosed().subscribe((res) => {
+        if (res) {
+          const subConfirm = this.dialogsService.openSubmitV1({
+            title: 'Ingrese la descripcion de lo que se necesita cotizar',
+            input: {
+              label: 'Descripcion',
+            },
+            buttons: [
+              {
+                title: 'Cancelar',
+                value: false,
+              },
+              {
+                title: 'Guardar',
+                value: true,
+                color: 'success',
+              },
+            ],
+          });
+
+          subConfirm.afterClosed().subscribe((subRes) => {
+            if (subRes) {
+              this.newQuotation({
+                company: service.company._id || '',
+                contact: service.contact._id || '',
+                description: subRes,
+                priority: 0,
+                status: 'Pendiente',
+                service: service._id,
+              }).subscribe((qRes) => {
+                if (qRes) {
+                  this.dialogsService.openNotificationV1({
+                    message:
+                      'Se creo correctamente la cotizacion para el servicio',
+                    status: StatusMessage.success,
+                  });
+                  ob.next(qRes);
+                } else {
+                  this.dialogsService.openNotificationV1({
+                    message:
+                      'No se pudo crear la cotizacion para este servicio',
+                    status: StatusMessage.danger,
+                  });
+                  ob.next(false);
+                }
+              });
+            }
+          });
+        }
+      });
+    });
   }
 
   // TODO: =========================== UPDATE QUOTATIONS ===========================

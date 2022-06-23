@@ -4,7 +4,10 @@ import { MatDialog } from '@angular/material/dialog';
 
 // INTERFACES
 import { QuotationItem } from '../../../../interfaces/quotation_item.interfaces';
-import { PurcharseOption } from '../../../../interfaces/purcharse_option.interface';
+import {
+  PurcharseOption,
+  PurcharseOptionWithClientProfit,
+} from '../../../../interfaces/purcharse_option.interface';
 
 // COMPONENTS
 import { QtAddPurcharseOptionComponent } from '../../add/qt-add-purcharse-option/qt-add-purcharse-option.component';
@@ -71,13 +74,25 @@ export class QtCardItemDetailsV1Component implements OnInit {
   }
 
   openPurcharseOptions(): void {
+    let data: PurcharseOptionWithClientProfit = {
+      data: this.item.purcharse_options || [],
+      profit_percent: this.profit_client,
+    };
+
+    if (this.mode_edit) {
+      data.mode_edit = {
+        quotation_id: this.mode_edit.quotation_id,
+        item_index: this.mode_edit.item_index,
+        quotation_items: this.mode_edit.quotation_items,
+      };
+    }
+
+    console.log('data -> PurcharseOptionWithClientProfit', data);
+
     const dialogRef = this.dialog.open(QtPurcharseDetailsV1Component, {
       width: '75vw',
       disableClose: true,
-      data: {
-        data: this.item.purcharse_options,
-        profit_percent: this.profit_client,
-      },
+      data,
     });
 
     let sus = dialogRef.afterClosed().subscribe((result: PurcharseOption[]) => {

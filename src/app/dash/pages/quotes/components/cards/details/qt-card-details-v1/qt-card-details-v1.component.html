@@ -4,8 +4,19 @@
   <div class="row m-0 p-1 pt-2">
     <div class="col-10">
       <h5 class="fw-bold fs-4">
+        <!-- CO -->
         <span class="badge bg-secondary">
+          <small class="mx-1 fs-6">CO</small>
           {{ quotation.quotation_no ? quotation.quotation_no : quotation._id }}
+        </span>
+
+        <!-- ORDS -->
+        <span
+          class="badge bg-primary mx-2"
+          *ngIf="quotation.service && quotation.service.service_order"
+        >
+          <small class="mx-1 fs-6">ORDS</small>
+          {{ quotation.service.service_order }}
         </span>
       </h5>
     </div>
@@ -69,6 +80,7 @@
           Cambiar Estatus
         </button>
         <button mat-menu-item (click)="openAddPO()">Registrar PO</button>
+        <button mat-menu-item (click)="openAddService()">Agregar servicio</button>
         <button mat-menu-item (click)="markAsFinished()">Finalizar</button>
         <button mat-menu-item disabled>Descargar PDF</button>
         <button mat-menu-item disabled>Visualizar PDF</button>

@@ -178,4 +178,32 @@ export class QtCardDetailsV1Component implements OnInit {
   openAddPO() {
     this.quotesService.openAddPO(this.quotation);
   }
+
+  openAddService() {
+    const ref = this.servicesService.openSelectService();
+
+    ref.afterClosed().subscribe((res) => {
+      if (res) {
+        this.quotesService
+          .updateQuotation({
+            _id: this.quotation._id,
+            service: res,
+          })
+          .subscribe((quotationRes) => {
+            if (quotationRes && quotationRes._id) {
+              this.quotation = quotationRes;
+              this.dialogsService.openNotificationV1({
+                message: 'Servicio agregado correctamente a la cotizacion',
+                status: StatusMessage.success,
+              });
+            } else {
+              this.dialogsService.openNotificationV1({
+                message: 'Error al asignar el servicio a la cotizacion',
+                status: StatusMessage.danger,
+              });
+            }
+          });
+      }
+    });
+  }
 }
