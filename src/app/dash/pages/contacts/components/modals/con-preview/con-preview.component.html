@@ -12,24 +12,69 @@
 </div>
 <div class="row">
   <div class="col-12 pb-1">
-    <h6 class="text-muted">DATOS DE CONTACTO:</h6>
+    <h6 class="text-muted fs-6">DATOS DE CONTACTO:</h6>
   </div>
-  <div class="col-12 col-lg-4">
-    {{ "Tel. " + phone }}
-  </div>
-  <div class="col-12 col-lg-4">
-    {{ "Cel: " + movil }}
-  </div>
-  <div class="col-12 col-lg-4">
-    {{ "Ext: " + ext }}
-  </div>
-  <div class="col-12">
-    {{ mail }}
-  </div>
+
+  <ng-container
+    *ngIf="phone || ext || movil || mail; then show_info; else empty"
+  ></ng-container>
+
+  <ng-template #show_info>
+    <!-- TEL -->
+    <div class="col-12 col-lg-4" *ngIf="phone && phone.length > 3">
+      <div>
+        <small class="text-muted">Tel:</small>
+        <p class="px-2 text-bold">
+          {{ phone }}
+        </p>
+      </div>
+    </div>
+    <!-- EXT -->
+    <div class="col-12 col-lg-4" *ngIf="ext && ext.length > 0">
+      <div>
+        <small class="text-muted">Ext:</small>
+        <p class="px-2 text-bold">
+          {{ ext }}
+        </p>
+      </div>
+    </div>
+
+    <!-- MOVIL -->
+    <div class="col-12 col-lg-4" *ngIf="movil && movil.length > 3">
+      <div>
+        <small class="text-muted">Movil:</small>
+        <p class="px-2 text-bold">
+          {{ movil }}
+        </p>
+      </div>
+    </div>
+
+    <!-- MAIL -->
+    <div class="col-12 col-lg-4" *ngIf="mail && mail.length > 3">
+      <div>
+        <small class="text-muted">Correo:</small>
+        <p class="px-2 text-bold">
+          {{ mail }}
+        </p>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #empty>
+    <div class="col-12 text-center p-2">
+      <p class="text-center text-muted">Sin informacion registrada</p>
+    </div>
+  </ng-template>
 </div>
-<div class="row my-5">
+<div
+  class="row my-5"
+  *ngIf="
+    this.contact.mails_quotes_copy_to &&
+    this.contact.mails_quotes_copy_to.length > 0
+  "
+>
   <div class="col-12">
-    <h6 class="text-muted">COTIZACIONES CON COPIA A:</h6>
+    <h6 class="text-muted fs-6">COTIZACIONES CON COPIA A:</h6>
   </div>
   <div
     class="col-12 col-lg-6 p-2"
@@ -44,10 +89,13 @@
   </div>
 </div>
 <div class="row justify-content-end">
-  <div class="col-12 col-lg-4 my-1 my-lg-0">
-    <button class="btn btn-dark w-100">ENVIAR CORREO</button>
+  <div class="col-12 col-lg-4 my-1 my-lg-0" *ngIf="mail && mail.length > 3">
+    <a [href]="'mailto:' + mail" class="btn btn-dark w-100">ENVIAR CORREO</a>
   </div>
-  <div class="col-12 col-lg-4 my-1 my-lg-0">
-    <button class="btn btn-dark w-100">LLAMAR</button>
+  <div class="col-12 col-lg-4 my-1 my-lg-0" *ngIf="movil && movil.length > 3">
+    <a [href]="'tel:' + movil" class="btn btn-dark w-100">LLAMAR A MOVIL</a>
+  </div>
+  <div class="col-12 col-lg-4 my-1 my-lg-0" *ngIf="phone && phone.length > 3">
+    <a [href]="'tel:' + phone" class="btn btn-dark w-100">LLAMAR A TEL</a>
   </div>
 </div>

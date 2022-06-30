@@ -1,0 +1,31 @@
+<div class="row" style="height: 5% !important">
+  <div class="col-12 text-end">
+    <mat-icon mat-dialog-close>close</mat-icon>
+  </div>
+</div>
+<div class="row align-items-start" style="height: 85% !important">
+  <ng-content
+    *ngIf="parts && parts.length > 0; then show_parts; else empty"
+  ></ng-content>
+
+  <ng-template #show_parts>
+    <div class="col-12" *ngFor="let part of parts; let i = index">
+      <app-ser-card-part-details-v1
+        [part]="part"
+        (emitDelete)="deletePart(i, $event)"
+      ></app-ser-card-part-details-v1>
+    </div>
+  </ng-template>
+
+  <ng-template #empty>
+    <div class="col-12 text-center">No hay partes registradas</div>
+  </ng-template>
+</div>
+<div class="row align-items-end" style="height: 10% !important">
+  <div class="col-9"></div>
+  <div class="col-3">
+    <button class="btn btn-dark w-100" (click)="registerPart()">
+      Registrar Parte
+    </button>
+  </div>
+</div>

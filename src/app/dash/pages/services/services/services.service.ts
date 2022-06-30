@@ -20,6 +20,8 @@ import {
 } from '../interfaces/service.interface';
 import { StatusMessage } from 'src/app/core/interfaces/dialogs.interface';
 import { SerSelectServiceByFilterV1Component } from '../components/modals/ser-select-service-by-filter-v1/ser-select-service-by-filter-v1.component';
+import { Part } from '../interfaces/parts.interface';
+import { SerPreviewPartsListComponent } from '../components/modals/ser-preview-parts-list/ser-preview-parts-list.component';
 
 @Injectable({
   providedIn: 'root',
@@ -299,7 +301,324 @@ export class ServicesService {
     return this.dialog.open(SerSelectServiceByFilterV1Component, {
       width: '95vw',
       height: '95vh',
-      disableClose: true
+      disableClose: true,
+    });
+  }
+
+  openRegisteredPartsList(service: ServicePopulated, installed: boolean) {
+    const ref = this.dialog.open(SerPreviewPartsListComponent, {
+      width: '80vw',
+      height: '80vh',
+      disableClose: true,
+      data: {
+        service,
+        installed,
+      },
+    });
+  }
+
+  registerPart(service: ServicePopulated, installed: boolean) {
+    const confirm = this.dialogsService.openConfirmationV1({
+      title:
+        '¿Desea agregar una parte como ' +
+        (installed ? 'instalada' : 'requerida') +
+        '?',
+      buttons: [
+        {
+          title: 'Cancelar',
+          value: false,
+        },
+        {
+          title: 'Confirmar',
+          value: true,
+          color: 'success',
+        },
+      ],
+    });
+
+    confirm.afterClosed().subscribe((res) => {
+      let part: Part = {
+        description: '',
+        employee: '620afd6e9d4b8b4308838aac',
+        quantity: 0,
+      };
+
+      if (res) {
+        const desConfirm = this.dialogsService.openSubmitV1({
+          title: 'Ingrese la descripcion de la parte',
+          input: {
+            label: 'Descripcion',
+          },
+          buttons: [
+            {
+              title: 'Cancelar',
+              value: false,
+            },
+            {
+              title: 'Guardar',
+              value: true,
+              color: 'success',
+            },
+          ],
+        });
+
+        desConfirm.afterClosed().subscribe((desRes) => {
+          if (desRes) {
+            // GUARDADO DESCRIPCION
+            part.description = desRes;
+
+            // AGREGANDO NUMERO DE PARTE
+            const partConf = this.dialogsService.openSubmitV1({
+              title: 'Ingrese el numero de parte',
+              input: {
+                label: 'No Parte',
+              },
+              buttons: [
+                {
+                  title: 'Cancelar',
+                  value: false,
+                },
+                {
+                  title: 'Guardar',
+                  value: true,
+                  color: 'success',
+                },
+              ],
+            });
+
+            partConf.afterClosed().subscribe((partRes) => {
+              if (partRes) {
+                part.no_part = partRes;
+
+                // COMPROBANDO SI ES PARTE INSTALADA PARA REGISTRAR SERIE
+                if (installed) {
+                  const serieConf = this.dialogsService.openSubmitV1({
+                    title: 'Ingrese el numero de serie de la parte',
+                    input: {
+                      label: 'Serie',
+                    },
+                    buttons: [
+                      {
+                        title: 'Cancelar',
+                        value: false,
+                      },
+                      {
+                        title: 'Guardar',
+                        value: true,
+                        color: 'success',
+                      },
+                    ],
+                  });
+
+                  serieConf.afterClosed().subscribe((serieRes) => {
+                    if (serieRes) {
+                      part.no_serial = serieRes;
+
+                      // INGRESANDO CANTIDAD
+                      part.quantity = 1;
+
+                      if (installed) {
+                        // VALIDAR - PARTES PARA INSTALACION
+                        if (service.installed_parts) {
+                          service.installed_parts.push(part);
+                        } else {
+                          service.installed_parts = [];
+                          service.installed_parts.push(part);
+                        }
+                      } else {
+                        // VALIDAR PARTES REQUERIDAS
+                        if (service.required_parts) {
+                          service.required_parts.push(part);
+                        } else {
+                          service.required_parts = [];
+                          service.required_parts.push(part);
+                        }
+                      }
+
+                      // GUARDADO PARTE
+                      this.updateService({
+                        _id: service._id,
+                        installed_parts: service.installed_parts,
+                        required_parts: service.required_parts,
+                      }).subscribe((res) => {
+                        if (res && res._id) {
+                          service = res;
+                          this.dialogsService.openNotificationV1({
+                            message: 'Parte agregada correctamente',
+                            status: StatusMessage.success,
+                          });
+                        } else {
+                          this.dialogsService.openNotificationV1({
+                            message: 'No se pudo agregar la parte al servicio',
+                            status: StatusMessage.danger,
+                          });
+                        }
+                      });
+                    }
+                  });
+                } else {
+                  // INGRESANDO CANTIDAD
+                  const qtConf = this.dialogsService.openSubmitV1({
+                    title: 'Ingrese la cantidad de partes (Numeros Enteros)',
+                    input: {
+                      label: 'Cantidad',
+                    },
+                    buttons: [
+                      {
+                        title: 'Cancelar',
+                        value: false,
+                      },
+                      {
+                        title: 'Guardar',
+                        value: true,
+                        color: 'success',
+                      },
+                    ],
+                  });
+
+                  qtConf.afterClosed().subscribe((qtRes: string) => {
+                    if (qtRes) {
+                      part.quantity = parseInt(qtRes, 10);
+
+                      if (installed) {
+                        // VALIDAR - PARTES PARA INSTALACION
+                        if (service.installed_parts) {
+                          service.installed_parts.push(part);
+                        } else {
+                          service.installed_parts = [];
+                          service.installed_parts.push(part);
+                        }
+                      } else {
+                        // VALIDAR PARTES REQUERIDAS
+                        if (service.required_parts) {
+                          service.required_parts.push(part);
+                        } else {
+                          service.required_parts = [];
+                          service.required_parts.push(part);
+                        }
+                      }
+
+                      // GUARDADO PARTE
+                      this.updateService({
+                        _id: service._id,
+                        installed_parts: service.installed_parts,
+                        required_parts: service.required_parts,
+                      }).subscribe((res) => {
+                        if (res && res._id) {
+                          service = res;
+                          this.dialogsService.openNotificationV1({
+                            message: 'Parte agregada correctamente',
+                            status: StatusMessage.success,
+                          });
+                        } else {
+                          this.dialogsService.openNotificationV1({
+                            message: 'No se pudo agregar la parte al servicio',
+                            status: StatusMessage.danger,
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  registerRepairProgress(service: ServicePopulated) {
+    const confirm = this.dialogsService.openConfirmationV1({
+      title: '¿Desea crear un registro de avance en la reparacion?',
+      buttons: [
+        {
+          title: 'Cancelar',
+          value: false,
+        },
+        {
+          title: 'Confirmar',
+          value: true,
+          color: 'success',
+        },
+      ],
+    });
+
+    confirm.afterClosed().subscribe((res) => {
+      if (res) {
+        const titleConf = this.dialogsService.openSubmitV1({
+          title: 'Ingrese el titulo del avance',
+          input: {
+            label: 'titulo',
+          },
+          buttons: [
+            {
+              title: 'Cancelar',
+              value: false,
+            },
+            {
+              title: 'Guardar',
+              value: true,
+              color: 'success',
+            },
+          ],
+        });
+
+        titleConf.afterClosed().subscribe((titleRes) => {
+          if (titleRes) {
+            const desConf = this.dialogsService.openSubmitV1({
+              title: 'Ingrese la descripcion del avance',
+              input: {
+                label: 'descripcion',
+              },
+              buttons: [
+                {
+                  title: 'Cancelar',
+                  value: false,
+                },
+                {
+                  title: 'Guardar',
+                  value: true,
+                  color: 'success',
+                },
+              ],
+            });
+
+            desConf.afterClosed().subscribe((desRes) => {
+              if (desRes) {
+                if (!service.repair_history) {
+                  service.repair_history = [];
+                }
+
+                service.repair_history.push({
+                  title: titleRes,
+                  description: desRes,
+                  // TODO: EMPLOYEE: id_employee
+                });
+
+                // GUARDAR AVANCE
+                this.updateService({
+                  _id: service._id,
+                  repair_history: service.repair_history,
+                }).subscribe((serUpdated) => {
+                  if (serUpdated && serUpdated._id) {
+                    service = serUpdated;
+                    this.dialogsService.openNotificationV1({
+                      message: 'Avance registrado correctamente',
+                      status: StatusMessage.success,
+                    });
+                  } else {
+                    this.dialogsService.openNotificationV1({
+                      message: 'No se pudo guardar el registro',
+                      status: StatusMessage.danger,
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
     });
   }
 }

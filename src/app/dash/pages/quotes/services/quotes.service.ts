@@ -19,6 +19,7 @@ import { PriorityList } from '../interfaces/quotations_service_data.interface';
 import { StatusTrackerPopulated } from '../../../interfaces/status_tracker.interface';
 import { TypeInputs } from 'src/app/core/components/dialogs/dg-submit-v1/dg-submit-v1.component';
 import { ServicePopulated } from '../../services/interfaces/service.interface';
+import { QuotationItem } from '../interfaces/quotation_item.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -132,6 +133,16 @@ export class QuotesService {
 
           subConfirm.afterClosed().subscribe((subRes) => {
             if (subRes) {
+              let items: QuotationItem[] = [];
+
+              for (let part of service.required_parts || []) {
+                items.push({
+                  description: part.description,
+                  part_no: part.no_part,
+                  quantity: part.quantity,
+                });
+              }
+
               this.newQuotation({
                 company: service.company._id || '',
                 contact: service.contact._id || '',
@@ -139,6 +150,7 @@ export class QuotesService {
                 priority: 0,
                 status: 'Pendiente',
                 service: service._id,
+                quotation_items: items,
               }).subscribe((qRes) => {
                 if (qRes) {
                   this.dialogsService.openNotificationV1({

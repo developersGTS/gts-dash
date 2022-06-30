@@ -1,0 +1,43 @@
+<div
+  class="card p-2 shadow mb-4 border-secondary border-4 border-top-0 border-end-0 border-start-0"
+  *ngIf="part"
+>
+  <div class="row py-2">
+    <div class="col-12 text-end">
+      <mat-icon class="c-pointer" [matMenuTriggerFor]="menu"
+        >more_vert</mat-icon
+      >
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="deletePart()">Eliminar</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-7">
+      <p class="m-0 p-0"><small class="text-muted">Descripcion:</small></p>
+      <p class="ms-2">
+        {{ part.description }}
+      </p>
+    </div>
+    <div class="col-3">
+      <p class="m-0 p-0"><small class="text-muted">No Parte:</small></p>
+      <p class="ms-2">
+        {{ part.no_part || "" }}
+      </p>
+    </div>
+    <div class="col-2 text-center">
+      <p class="m-0 p-0"><small class="text-muted">Cantidad:</small></p>
+      <p>
+        {{ part.quantity || "" }}
+      </p>
+    </div>
+    <div class="col-8">
+      <div *ngIf="part.no_serial">
+        <p class="m-0 p-0"><small class="text-muted">No Serie:</small></p>
+        <p>
+          {{ part.no_serial }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -112,13 +112,55 @@
       <button class="btn btn-dark w-100">NOTAS</button>
     </div>
     <div class="col-2">
-      <button class="btn btn-dark w-100">PARTES INSTALADAS</button>
+      <button
+        class="btn btn-dark w-100"
+        (click)="openRegisterPartsList(true)"
+        [matBadge]="
+          service.installed_parts && service.installed_parts.length > 0
+            ? service.installed_parts.length
+            : 0
+        "
+        matBadgeColor="primary"
+        [matBadgeHidden]="
+          service.installed_parts && service.installed_parts.length <= 0
+        "
+      >
+        PARTES INSTALADAS
+      </button>
     </div>
     <div class="col-2">
-      <button class="btn btn-dark w-100">PARTES REQUERIDAS</button>
+      <button
+        class="btn btn-dark w-100"
+        (click)="openRegisterPartsList(false)"
+        [matBadge]="
+          service.required_parts && service.required_parts.length > 0
+            ? service.required_parts.length
+            : 0
+        "
+        matBadgeColor="primary"
+        [matBadgeHidden]="
+          service.required_parts && service.required_parts.length <= 0
+        "
+      >
+        PARTES REQUERIDAS
+      </button>
     </div>
     <div class="col-3">
-      <button class="btn btn-dark w-100">REGISTRAR AVANCE</button>
+      <button
+        class="btn btn-dark w-100"
+        (click)="openRegisterRepairProgress()"
+        [matBadge]="
+          service.repair_history && service.repair_history.length > 0
+            ? service.repair_history.length
+            : 0
+        "
+        matBadgeColor="primary"
+        [matBadgeHidden]="
+          service.repair_history && service.repair_history.length <= 0
+        "
+      >
+        REGISTRAR AVANCE
+      </button>
     </div>
     <div class="col-3">
       <button class="btn btn-dark w-100">ABRIR DESGLOSE</button>

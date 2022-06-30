@@ -128,4 +128,16 @@ export class SerCardDetailsV1Component implements OnInit {
         }
       });
   }
+
+  registerPart(installed: boolean) {
+    this.servicesService.registerPart(this.service, installed);
+  }
+
+  openRegisterPartsList(installed: boolean) {
+    this.servicesService.openRegisteredPartsList(this.service, installed);
+  }
+
+  openRegisterRepairProgress() {
+    this.servicesService.registerRepairProgress(this.service);
+  }
 }

@@ -33,6 +33,8 @@ import { SerSearcherV1Component } from './components/searchers/ser-searcher-v1/s
 import { SerSelectServiceByFilterV1Component } from './components/modals/ser-select-service-by-filter-v1/ser-select-service-by-filter-v1.component';
 import { SerCardDetailsV2Component } from './components/cards/details/ser-card-details-v2/ser-card-details-v2.component';
 import { SerCardDetailsResumenV1Component } from './components/cards/details/ser-card-details-resumen-v1/ser-card-details-resumen-v1.component';
+import { SerPreviewPartsListComponent } from './components/modals/ser-preview-parts-list/ser-preview-parts-list.component';
+import { SerCardPartDetailsV1Component } from './components/cards/details/ser-card-part-details-v1/ser-card-part-details-v1.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { SerCardDetailsResumenV1Component } from './components/cards/details/ser
     SerSelectServiceByFilterV1Component,
     SerCardDetailsV2Component,
     SerCardDetailsResumenV1Component,
+    SerPreviewPartsListComponent,
+    SerCardPartDetailsV1Component,
   ],
   imports: [
     CommonModule,

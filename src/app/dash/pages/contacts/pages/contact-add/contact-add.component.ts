@@ -30,6 +30,10 @@ export class ContactAddComponent implements OnInit {
   formAddContact = this._formBuilder.group({
     company: [{ value: '', disable: true }, [Validators.required]],
     name: ['', []],
+    phone: ['', []],
+    ext: ['', []],
+    movil: ['', []],
+    mail: ['', []],
     mails_quotes_copy_to: ['', []],
   });
 
@@ -64,6 +68,15 @@ export class ContactAddComponent implements OnInit {
           company: this.formAddContact.controls['company'].value,
           name: this.formAddContact.controls['name'].value,
           mails_quotes_copy_to: this.mails_copy,
+          contact: [
+            {
+              phone: this.formAddContact.controls['phone'].value,
+              ext: this.formAddContact.controls['ext'].value,
+              movil: this.formAddContact.controls['movil'].value,
+              mail: this.formAddContact.controls['mail'].value,
+              default: true,
+            },
+          ],
         })
         .subscribe((res) => {
           if (res) {
