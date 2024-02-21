@@ -1,0 +1,23 @@
+<div class="row m-0 mb-5 p-1">
+    <div class="col-12">
+      <app-qt-filter
+        [quotations]="quotations"
+        (emitQuotationFiltered)="applyFilter($event)"
+      ></app-qt-filter>
+    </div>
+  </div>
+  <div class="row m-0 px-4 justify-content-end">
+    <div class="col-12 col-sm-6 col-md-5 col-lg-4 p-1">
+      <app-qt-searcher-v1
+        [quotations]="quotations"
+        (emitQuotationsFiltered)="applyFilter($event)"
+      ></app-qt-searcher-v1>
+    </div>
+  </div>
+  <div class="row m-0">
+    <app-coll-card-details-v1
+      [quotation]="quotation"
+      *ngFor="let quotation of quotationView"
+    ></app-coll-card-details-v1>
+  </div>
+  
