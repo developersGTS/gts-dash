@@ -14,6 +14,7 @@ import { ServiceStatus } from '../interfaces/service-status.interface';
 import { DialogsService } from '../../../../core/services/dialogs.service';
 import {
   Service,
+  ServiceLabelLab,
   ServicePopulated,
   ServiceSch,
   ServiceUpdate,
@@ -63,6 +64,10 @@ export class ServicesService {
 
   getServiceByCustom(payload: ServiceSch) {
     return this.http.post<ServicePopulated[]>(`${this.api_base}/sch`, payload);
+  }
+
+  getLabelLab(id: string) {
+    window.open(`${this.api_base}/label/lab/${id}`);
   }
 
   // ===================== CREATE =====================
@@ -208,6 +213,7 @@ export class ServicesService {
       _id,
       status,
       status_tracker,
+      enabled: status == 'Finalizado' ? false : true,
     });
   }
 

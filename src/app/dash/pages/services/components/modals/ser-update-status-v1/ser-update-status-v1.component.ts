@@ -85,4 +85,6 @@ export class SerUpdateStatusV1Component implements OnInit {
     console.log('data', data);
     this.dialogRef.close(data ? data : null);
   }
+
+  
 }

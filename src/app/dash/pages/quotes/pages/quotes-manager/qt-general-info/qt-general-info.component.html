@@ -13,7 +13,7 @@
                   [value]="company._id"
                   (click)="companyEvent(company)"
                 >
-                  {{ company.nickname }}
+                  {{ company && company.nickname ? company.nickname : "" }}
                 </mat-option>
               </mat-select>
             </mat-form-field>

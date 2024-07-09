@@ -121,16 +121,11 @@ export class QtGeneralInfoComponent implements OnInit {
 
   ngOnInit(): void {
     // LOAD COMPANYS
-    this.companysService
-      .getCompanys()
-      .pipe(
-        map((res: Company[]) => {
-          this.companys = res;
-          this.companys_loader = false;
-          this.formGeneralInfo.controls['company'].enable();
-        })
-      )
-      .subscribe();
+    this.companysService.getCompanys().subscribe((res: Company[]) => {
+      this.companys = res;
+      this.companys_loader = false;
+      this.formGeneralInfo.controls['company'].enable();
+    });
 
     // LOAD CONTACTS
     this.contactsService

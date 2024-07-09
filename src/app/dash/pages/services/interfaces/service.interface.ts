@@ -112,3 +112,10 @@ export interface ServiceSch {
   authorized?: boolean;
   in_quotation?: boolean;
 }
+
+export interface ServiceLabelLab {
+  company: String;
+  contact: String;
+  tel?: String;
+  description?: String;
+}

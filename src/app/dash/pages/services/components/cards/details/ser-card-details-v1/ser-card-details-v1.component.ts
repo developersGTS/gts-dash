@@ -140,4 +140,8 @@ export class SerCardDetailsV1Component implements OnInit {
   openRegisterRepairProgress() {
     this.servicesService.registerRepairProgress(this.service);
   }
+
+  printLabelLab() {
+    this.servicesService.getLabelLab(this.service._id);
+  }
 }
